@@ -49,15 +49,15 @@ def getEntries(categories):
 def generateMenu(base_path, i, depth, categories, entries, write):
   category = categories[i]
   if base_path != '/':
-    write(depth, "menu begin %s" % (category.path,))
+    write(depth, "menu begin %d" % (i,))
     write(depth + 1, "menu title %s" % (category.name,))
-    write(depth + 1, "label mainmenu")
+    write(depth + 1, "label %d_back" % (i,))
     write(depth + 2, "menu label Back...")
     write(depth + 2, "menu exit")
   if category.path == base_path:
     for entry_key in category.entries:
       entry = entries[entry_key]
-      write(depth, "label %d" % (entry_key.id(),))
+      write(depth, "label %d_%d" % (i, entry_key.id()))
       write(depth + 1, "menu label %s" % (entry.name,))
       write(depth + 1, entry.generateMenuEntry())
   i += 1
