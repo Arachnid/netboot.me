@@ -17,9 +17,6 @@ application = webapp.WSGIApplication([
   # Category gpxe script (loads category menu)
   ('(/(?:[a-zA-Z].*/)?)gpxe', GpxeHandler), 
 
-  # Menu code for gpxe script
-  ('(?:/[a-zA-Z].*)?/(menu.c32|vesamenu.c32)', StaticFileHandler),
-
   # Category menu definition
   ('(/(?:[a-zA-Z].*/)?)menu.cfg', MenuHandler),
 
