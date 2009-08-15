@@ -8,5 +8,10 @@ handlers:
   script: $PYTHON_LIB/google/appengine/ext/remote_api/handler.py
   login: admin
 
+- url: /test.cfg
+  static_files: static/test.cfg
+  upload: static/test.cfg
+  mime_type: text/plain
+
 - url: /.*
   script: request.py

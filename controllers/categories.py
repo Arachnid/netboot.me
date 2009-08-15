@@ -46,23 +46,26 @@ def getEntries(categories):
   entry_keys = list(entry_keys)
   return dict(zip(entry_keys, db.get(entry_keys)))
 
-def generateMenu(base_path, i, categories, entries, config_lines):
+def generateMenu(base_path, i, depth, categories, entries, write):
   category = categories[i]
   if base_path != '/':
-    config_lines.append("menu begin %s" % (category.path,))
-    config_lines.append("menu title %s" % (category.name,))
+    write(depth, "menu begin %s" % (category.path,))
+    write(depth + 1, "menu title %s" % (category.name,))
+    write(depth + 1, "label mainmenu")
+    write(depth + 2, "menu label Back...")
+    write(depth + 2, "menu exit")
   if category.path == base_path:
     for entry_key in category.entries:
       entry = entries[entry_key]
-      config_lines.append("label %d" % (entry_key.id(),))
-      config_lines.append("menu label %s" % (entry.name,))
-      config_lines.extend(entry.generateMenuEntry())
+      write(depth, "label %d" % (entry_key.id(),))
+      write(depth + 1, "menu label %s" % (entry.name,))
+      write(depth + 1, entry.generateMenuEntry())
   i += 1
   while i < len(categories) and categories[i].path.startswith(base_path):
-    i = generateMenu(categories[i].path, i, categories, entries,
-                     config_lines)
-  if base_path:
-    config_lines.append("menu end")
+    i = generateMenu(categories[i].path, i, depth + 1, categories, entries,
+                     write)
+  if base_path != '/':
+    write(depth, "menu end")
   return i
 
 def getConfig(category_name):
@@ -71,7 +74,11 @@ def getConfig(category_name):
     return None, None
   entries = getEntries(categories)
   config_lines = []
-  generateMenu('/', 0, categories, entries, config_lines)
+  def write_config_line(depth, lines):
+    if not isinstance(lines, list):
+      lines = [lines]
+    config_lines.extend("%s%s" % (" " * depth * 2, x) for x in lines)
+  generateMenu('/', 0, -1, categories, entries, write_config_line)
   return category, '\n'.join(config_lines)
 
 class MenuHandler(base.BaseHandler):
@@ -84,5 +91,5 @@ class MenuHandler(base.BaseHandler):
     template_values = self.getTemplateValues()
     template_values['category'] = category
     template_values['config'] = config
-    self.response.headers['Content-Type'] = 'text/plain'
+    self.response.headers['Content-Type'] = 'application/octet-stream'
     self.renderTemplate('menu.cfg', template_values)

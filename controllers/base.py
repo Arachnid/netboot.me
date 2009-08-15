@@ -15,7 +15,6 @@ class BaseHandler(webapp.RequestHandler):
   
   def renderTemplate(self, template_name, template_values):
     path = self.getTemplatePath(template_name)
-    logging.debug(path)
     self.response.out.write(template.render(path, template_values))
 
   def getTemplateValues(self):
