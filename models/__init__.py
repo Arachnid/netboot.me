@@ -47,6 +47,25 @@ class BootConfiguration(polymodel.PolyModel):
   
   def generateGpxeScript(self):
     raise NotImplementedError()
+  
+  def typeName(self):
+    raise NotImplementedError()
+
+  def attributes(self):
+    raise NotImplementedError()
+
+  @property
+  def categories(self):
+    return Category.all().filter("entries =", self.key())
+
+def truncateUrl(url):
+  parts = url.split("/")
+  if len(parts) <= 8:
+    return url
+  return "/".join(parts[:8]) + "/..."
+
+def formatUrlLink(url):
+  return '<a href="%s">%s</a>' % (url, truncateUrl(url))
 
 class KernelBootConfiguration(BootConfiguration):
   kernel = db.LinkProperty(required=True)
@@ -66,6 +85,16 @@ class KernelBootConfiguration(BootConfiguration):
         "boot",
     ]
 
+  def typeName(self):
+    return "Linux Kernel"
+  
+  def attributes(self):
+    return [
+        ("Kernel image", formatUrlLink(self.kernel)),
+        ("Initial ramdisk", formatUrlLink(self.initrd)),
+        ("Kernel arguments", self.args),
+    ]
+
 class MemdiskBootConfiguration(BootConfiguration):
   image = db.LinkProperty(required=True)
   
@@ -81,3 +110,9 @@ class MemdiskBootConfiguration(BootConfiguration):
       "initrd %s" % (self.image,),
       "boot"
     ]
+
+  def typeName(self):
+    return "Memdisk"
+  
+  def attributes(self):
+    return [("Memdisk location", formatUrlLink(self.image))]

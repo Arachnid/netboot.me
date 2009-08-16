@@ -1,0 +1,24 @@
+{% extends "../base.html" %}
+{% block title %}{{config.name|escape}}{% endblock %}
+{% block body %}
+	<div id="featured" class="clear">
+    {% for category in config.categories %}
+      <p>{% for part in category.path_tuples %}
+        <a href="{{part.1}}">{{part.0}}</a> /
+      {% endfor %}</p>
+    {% endfor %}
+    <h2>{{config.name}}</h2>
+    <p>{{config.description}}</p>
+    <table>
+      <tr><th>Created</th><td>{{config.created|date:"Y/m/d"}}</td></tr>
+      <tr><th>Type</th><td>{{config.typeName}}</td></tr>
+      {% for attrib in config.attributes %}
+        <tr><th>{{attrib.0}}</th><td>{{attrib.1}}</td></tr>
+      {% endfor %}
+      <tr>
+        <th>Chainload URL <a href="/help#chainload" title="What's this?">(?)</a></th>
+        <td>http://netboot.me/{{config.key.id}}</td>
+      </tr>
+    </table>
+	</div>
+{% endblock %}
