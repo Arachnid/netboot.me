@@ -13,9 +13,8 @@
 		<p id="slogan">Boot anything, anywhere, anytime</p>	
 		<div  id="nav">
 			<ul>
-				<li class="first" {% ifequal handler "IndexHandler" %}id="current"{% endifequal %}><a href="index.html">Home</a></li>
-        <li {% ifequal handler "HelpHandler" %}id="current"{% endifequal %}><a href="/help">Help</a></li>
-        <li {% ifequal handler "DownloadHandler" %}id="current"{% endifequal %}><a href="/download">Download</a></li>
+				<li class="first" {% ifequal handler "IndexHandler" %}id="current"{% endifequal %}><a href="/">Home</a></li>
+        <li {% ifequal handler "GettingStartedHandler" %}id="current"{% endifequal %}><a href="/gettingstarted">Getting Started</a></li>
         <li {% ifequal handler "CategoryHandler" %}id="current"{% endifequal %}><a href="/browse">Packages</a></li>
 			</ul>		
 		</div>	
