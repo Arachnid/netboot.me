@@ -56,40 +56,53 @@ def getEntries(categories):
   entry_keys = list(entry_keys)
   return dict(zip(entry_keys, db.get(entry_keys)))
 
-def generateMenu(base_path, i, depth, categories, entries, write):
-  category = categories[i]
-  if base_path != '/':
-    write(depth, "menu begin %d" % (i,))
-    write(depth + 1, "menu title %s" % (category.name,))
-    write(depth + 1, "label %d_back" % (i,))
-    write(depth + 2, "menu label Back...")
-    write(depth + 2, "menu exit")
-  if category.path == base_path:
-    for entry_key in category.entries:
-      entry = entries[entry_key]
-      write(depth, "label %d_%d" % (i, entry_key.id()))
-      write(depth + 1, "menu label %s" % (entry.name,))
-      write(depth + 1, entry.generateMenuEntry())
-  i += 1
-  while i < len(categories) and categories[i].path.startswith(base_path):
-    i = generateMenu(categories[i].path, i, depth + 1, categories, entries,
-                     write)
-  if base_path != '/':
-    write(depth, "menu end")
-  return i
+def makeLine(menu, depth, format, *args):
+  menu.append(("  " * depth) + (format % args))
+
+class MenuEntry(object):
+  def __init__(self, category, entries):
+    self.category = category
+    self.subcategories = []
+    self.entries = [entries[x] for x in category.entries]
+
+  def writeMenu(self, menu, depth=0, menupath='', first=False):
+    if menupath:
+      makeLine(menu, depth - 1, "menu begin %s", menupath[1:])
+      if first:
+        makeLine(menu, depth, "menu default")
+      makeLine(menu, depth, "menu title %s", self.category.name)
+      makeLine(menu, depth, "label %s.back", menupath[1:])
+      makeLine(menu, depth + 1, "menu label Back...")
+      makeLine(menu, depth + 1, "menu exit")
+    for i, category in enumerate(self.subcategories):
+      category.writeMenu(menu, depth + 1, menupath + (".%d" % i), i==0)
+    for i, entry in enumerate(self.entries):
+      makeLine(menu, depth, "label %s.e%d", menupath[1:], i)
+      makeLine(menu, depth + 1, "menu label %s", entry.name)
+      menu.extend(("  "*(depth+1)) + x for x in entry.generateMenuEntry())
+    if menupath:
+      makeLine(menu, depth - 1, "menu end")
+
+def generateMenu(categories, entries):
+  stack = []
+  for category in categories:
+    while stack and not category.path.startswith(stack[-1].category.path):
+      stack.pop()
+    entry = MenuEntry(category, entries)
+    if stack:
+      stack[-1].subcategories.append(entry)
+    stack.append(entry)
+  return stack[0]
 
 def getConfig(category_name):
   category, categories = getCategories(category_name)
   if not category:
     return None, None
   entries = getEntries(categories)
-  config_lines = []
-  def write_config_line(depth, lines):
-    if not isinstance(lines, list):
-      lines = [lines]
-    config_lines.extend("%s%s" % (" " * depth * 2, x) for x in lines)
-  generateMenu('/', 0, -1, categories, entries, write_config_line)
-  return category, '\n'.join(config_lines)
+  menu = generateMenu(categories, entries)
+  menu_lines = []
+  menu.writeMenu(menu_lines)
+  return category, "\n".join(menu_lines)
 
 class MenuHandler(base.BaseHandler):
   """Serves up netboot menu files for the category."""

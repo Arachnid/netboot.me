@@ -48,7 +48,7 @@ class BootConfiguration(polymodel.PolyModel):
   created = db.DateTimeProperty(required=True, auto_now_add=True)
 
   def generateMenuEntry(self):
-    raise NotImplementedError()
+    return ["kernel /%d/gpxe" % (self.key().id(),)]
   
   def generateGpxeScript(self):
     raise NotImplementedError()
@@ -77,17 +77,11 @@ class KernelBootConfiguration(BootConfiguration):
   initrd = db.LinkProperty()
   args = db.StringProperty()
 
-  def generateMenuEntry(self):
-    return [
-        "kernel %s" % (self.kernel,),
-        "append initrd=%s %s" % (self.initrd, self.args),
-    ]
-
   def generateGpxeScript(self):
     return [
-        "kernel %s %s" % (self.kernel, self.args),
-        "initrd %s" % (self.initrd,),
-        "boot",
+        "kernel -n img %s %s" % (self.kernel, self.args),
+        "initrd -n img %s" % (self.initrd,),
+        "boot img",
     ]
 
   def typeName(self):
@@ -103,17 +97,11 @@ class KernelBootConfiguration(BootConfiguration):
 class MemdiskBootConfiguration(BootConfiguration):
   image = db.LinkProperty(required=True)
   
-  def generateMenuEntry(self):
-    return [
-      "kernel %s" % (config.memdisk_url,),
-      "append initrd=%s" % (self.image,),
-    ]
-
   def generateGpxeScript(self):
     return [
-      "kernel %s" % (config.memdisk_url,),
-      "initrd %s" % (self.image,),
-      "boot"
+      "kernel -n img %s" % (config.memdisk_url,),
+      "initrd -n img %s" % (self.image,),
+      "boot img"
     ]
 
   def typeName(self):
