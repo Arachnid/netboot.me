@@ -31,6 +31,11 @@ class Category(db.Model):
   @property
   def entry_items(self):
     return db.get(self.entries)
+  
+  @property
+  def path_tuples(self):
+    parts = self.path.split("/")
+    return [(x, "/".join(parts[:i+2])) for i, x in enumerate(parts[1:-1])]
 
 class BootConfiguration(polymodel.PolyModel):
   name = db.TextProperty(required=True)

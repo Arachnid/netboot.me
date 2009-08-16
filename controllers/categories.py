@@ -17,7 +17,8 @@ class CategoryHandler(base.BaseHandler):
     if not category.endswith('/'):
       self.redirect("%s/" % (category,))
       return
-    category = category[:-1]
+    if category != "/":
+      category = category[:-1]
     template_values = self.getTemplateValues()
     category = models.Category.get_by_key_name(category)
     template_values['category'] = category

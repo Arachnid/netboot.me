@@ -2,6 +2,13 @@
 {% block title %}{{category.name}}{% endblock %}
 {% block body %}
 	<div id="featured" class="clear">
+    {% ifnotequal category.path "/" %}
+      <span>
+        {% for part in category.path_tuples %}
+          <a href="{{part.1}}">{{part.0}}</a> /
+        {% endfor %}
+      </span>
+    {% endifnotequal %}
     <h2>{{category.name|escape}}</h2>
     {% if category.description %}
       <p>{{category.description|escape}}</p>
