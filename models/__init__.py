@@ -48,7 +48,7 @@ class BootConfiguration(polymodel.PolyModel):
   created = db.DateTimeProperty(required=True, auto_now_add=True)
 
   def generateMenuEntry(self):
-    return ["kernel /%d/gpxe" % (self.key().id(),)]
+    return ["kernel /%d/boot.gpxe" % (self.key().id(),)]
   
   def generateGpxeScript(self):
     raise NotImplementedError()

@@ -13,7 +13,7 @@ application = webapp.WSGIApplication([
   ('/gettingstarted', GettingStartedHandler),
 
   # Category gpxe script (loads category menu)
-  ('(/(?:[a-zA-Z].*/)?)gpxe', GpxeHandler), 
+  ('(/(?:[a-zA-Z].*/)?)menu.gpxe', GpxeHandler), 
 
   # Category menu definition
   ('(/(?:[a-zA-Z].*/)?)menu.cfg', MenuHandler),
@@ -22,7 +22,7 @@ application = webapp.WSGIApplication([
   ('/([0-9]+)', BootConfigHandler),
   
   # Individual boot gpxe script
-  ('/([0-9]+)/gpxe', BootGpxeHandler),
+  ('/([0-9]+)/boot.gpxe', BootGpxeHandler),
 
   # Category page
   ('(/[a-zA-Z].*)', CategoryHandler),

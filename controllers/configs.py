@@ -5,7 +5,7 @@ class BootConfigHandler(base.BaseHandler):
   """Serves up pages for individual configurations."""
   def get(self, id):
     if self.isGpxe():
-      self.redirect("/%s/gpxe" % (id,))
+      self.redirect("/%s/boot.gpxe" % (id,))
       return
     config = models.BootConfiguration.get_by_id(int(id))
     if not config:

@@ -12,7 +12,7 @@ class CategoryHandler(base.BaseHandler):
     if category == '/browse':
       category = '/'
     if self.isGpxe():
-      self.redirect("%s/gpxe" % (category,))
+      self.redirect("%s/menu.gpxe" % (category,))
       return
     if not category.endswith('/'):
       self.redirect("%s/" % (category,))
@@ -78,6 +78,8 @@ class MenuEntry(object):
       category.writeMenu(menu, depth + 1, menupath + (".%d" % i), i==0)
     for i, entry in enumerate(self.entries):
       makeLine(menu, depth, "label %s.e%d", menupath[1:], i)
+      if not self.subcategories and i == 0:
+        makeLine(menu, depth + 1, "menu default")
       makeLine(menu, depth + 1, "menu label %s", entry.name)
       menu.extend(("  "*(depth+1)) + x for x in entry.generateMenuEntry())
     if menupath:
