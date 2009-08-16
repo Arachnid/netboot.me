@@ -8,13 +8,21 @@ from google.appengine.ext import db
 class CategoryHandler(base.BaseHandler):
   """Serves end-user category pages, and redirects to GpxeHandler for gPXE."""
   def get(self, category):
+    logging.debug(category)
+    if category == '/browse':
+      category = '/'
     if self.isGpxe():
       self.redirect("%s/gpxe" % (category,))
       return
     if not category.endswith('/'):
       self.redirect("%s/" % (category,))
       return
-    self.renderTemplate("index.html", self.getTemplateValues())
+    category = category[:-1]
+    template_values = self.getTemplateValues()
+    category = models.Category.get_by_key_name(category)
+    template_values['category'] = category
+    template_values['subcategories'] = category.subcategories.fetch(100)
+    self.renderTemplate("index.html", template_values)
 
 class GpxeHandler(base.BaseHandler):
   """Serves up gPXE scripts to boot the category menu."""

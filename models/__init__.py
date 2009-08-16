@@ -4,8 +4,12 @@ from google.appengine.ext import db
 from google.appengine.ext.db import polymodel
 
 class Category(db.Model):
+  # An informative name for the category
   name = db.StringProperty(required=True)
+  description = db.TextProperty()
+  # The / separated path from the root category
   path = db.StringProperty(required=True)
+  # The number of components in the path
   depth = db.IntegerProperty(required=True)
   entries = db.ListProperty(db.Key, required=True, default=[])
   
@@ -15,6 +19,18 @@ class Category(db.Model):
     if not name:
       name = path_parts[-1]
     return cls(key_name=path, path=path, name=name, depth=len(path_parts))
+
+  @property
+  def subcategories(self):
+    q = Category.all()
+    q.filter("path >", self.path)
+    q.filter("path <", self.path + u'\ufffd')
+    q.filter("depth =", self.depth + 1)
+    return q.order('path')
+
+  @property
+  def entry_items(self):
+    return db.get(self.entries)
 
 class BootConfiguration(polymodel.PolyModel):
   name = db.TextProperty(required=True)

@@ -1,5 +1,36 @@
 {% extends "../base.html" %}
-{% block title %}Welcome{% endblock %}
+{% block title %}{{category.name}}{% endblock %}
 {% block body %}
-Placeholder
+	<div id="featured" class="clear">
+    <h2>{{category.name|escape}}</h2>
+    {% if category.description %}
+      <p>{{category.description|escape}}</p>
+    {% endif %}
+    {% if subcategories %}
+      <h3>Subcategories</h3>
+      <ul>
+        {% for subcategory in subcategories %}
+          <li>
+            <a href="{{subcategory.path}}">{{subcategory.name|escape}}</a>
+            {% if subcategory.description %}
+              <p>{{subcategory.description|truncatewords:20}}</p>
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+    {% if category.entries %}
+      <h3>Entries</h3>
+      <ul>
+        {% for entry in category.entry_items %}
+          <li>
+            <a href="/{{entry.key.id}}">{{entry.name|escape}}</a>
+            {% if entry.description %}
+              <p>{{entry.description|truncatewords:20}}</p>
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  </div>
 {% endblock %}
