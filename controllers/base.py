@@ -18,7 +18,9 @@ class BaseHandler(webapp.RequestHandler):
     self.response.out.write(template.render(path, template_values))
 
   def getTemplateValues(self):
-    return {}
+    return {
+        'handler': self.__class__.__name__,
+    }
 
   def isGpxe(self):
     return self.request.headers.get('User-Agent', '').startswith('gPXE')

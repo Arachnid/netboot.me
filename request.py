@@ -11,9 +11,6 @@ application = webapp.WSGIApplication([
   # Homepage
   ('/', IndexHandler),
 
-  # Category page
-  ('(/[a-zA-Z].*)(/)', CategoryHandler),
-
   # Category gpxe script (loads category menu)
   ('(/(?:[a-zA-Z].*/)?)gpxe', GpxeHandler), 
 
@@ -25,6 +22,9 @@ application = webapp.WSGIApplication([
   
   # Individual boot gpxe script
   ('/([0-9]+)/gpxe', BootGpxeHandler),
+
+  # Category page
+  ('(/[a-zA-Z].*)(/)?', CategoryHandler),
 ], debug=config.on_dev_server)
 
 def main():

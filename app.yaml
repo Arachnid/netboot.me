@@ -12,5 +12,11 @@ handlers:
   static_files: static/\1
   upload: static/(menu.c32|vesamenu.c32)
 
+- url: /css
+  static_dir: static/css
+
+- url: /images
+  static_dir: static/images
+
 - url: /.*
   script: request.py

@@ -1,14 +1,42 @@
-<!DOCTYPE html
-  PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-  <title>{% block title %}{% endblock %} - netboot.me</title>
-  <link rel="stylesheet" type="text/css" href="/style.css" />
-  <link rel="shortcut icon" type="image/png" href="/favicon.png" />
+<title>{% block title %}{% endblock %} - netboot.me</title>
+  <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
+  <link rel="stylesheet" type="text/css" media="screen" href="css/screen.css" />
   {% block head %}{% endblock %}
 </head>
 <body>
+<div id="wrap">
+	<div id="header">			
+		<h1 id="logo-text"><a href="index.html" title="">netboot.me</a></h1>		
+		<p id="slogan">Boot anything, anywhere, anytime</p>	
+		<div  id="nav">
+			<ul>
+				<li class="first" {% ifequal handler "IndexHandler" %}id="current"{% endifequal %}><a href="index.html">Home</a></li>
+        <li {% ifequal handler "HelpHandler" %}id="current"{% endifequal %}><a href="/help">Help</a></li>
+        <li {% ifequal handler "DownloadHandler" %}id="current"{% endifequal %}><a href="/download">Download</a></li>
+        <li {% ifequal handler "CategoryHandler" %}id="current"{% endifequal %}><a href="/browse">Packages</a></li>
+			</ul>		
+		</div>	
+		<div id="header-image"></div>
+	</div>
   {% block body %}{% endblock %}
+	<div id="footer-bottom">
+		<div class="bottom-left">
+			<p>
+			&copy; 2009 <strong>Nick Johnson</strong>&nbsp; &nbsp; &nbsp;
+			Design by: <a href="http://www.styleshout.com/">styleshout</a> 			
+			</p>
+		</div>
+		<div class="bottom-right">
+			<p>		
+				<a href="http://jigsaw.w3.org/css-validator/check/referer">CSS</a> | 
+		   	<a href="http://validator.w3.org/check/referer">XHTML</a>	|			
+				<a href="/">Home</a>
+			</p>
+		</div>
+	</div>
+</div>
 </body>
 </html>
