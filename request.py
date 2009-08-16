@@ -24,7 +24,7 @@ application = webapp.WSGIApplication([
   ('/([0-9]+)/gpxe', BootGpxeHandler),
 
   # Category page
-  ('(/[a-zA-Z].*)(/)?', CategoryHandler),
+  ('(/[a-zA-Z].*)', CategoryHandler),
 ], debug=config.on_dev_server)
 
 def main():

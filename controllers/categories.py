@@ -1,17 +1,18 @@
 import base
 import logging
 import models
+import urlparse
 
 from google.appengine.ext import db
 
 class CategoryHandler(base.BaseHandler):
   """Serves end-user category pages, and redirects to GpxeHandler for gPXE."""
-  def get(self, category, slash):
+  def get(self, category):
     if self.isGpxe():
-      self.redirect("/%s/gpxe" % (category,))
+      self.redirect("%s/gpxe" % (category,))
       return
-    if not slash:
-      self.redirect("/%s/" % (category,))
+    if not category.endswith('/'):
+      self.redirect("%s/" % (category,))
       return
     self.renderTemplate("index.html", self.getTemplateValues())
 
