@@ -1,5 +1,6 @@
 import cgi
 import logging
+import models
 import os
 import sys
 import traceback
@@ -9,6 +10,10 @@ from google.appengine.ext import webapp
 from google.appengine.ext.webapp import template
 
 class BaseHandler(webapp.RequestHandler):
+  def initialize(self, request, response):
+    super(BaseHandler, self).initialize(request, response)
+    self.user = models.UserAccount.get_current()
+  
   def getTemplatePath(self, template):
     module = self.__module__.rpartition('.')[2]
     return os.path.join('templates', module , template)

@@ -11,14 +11,11 @@ class CategoryHandler(base.BaseHandler):
     logging.debug(category)
     if category == '/browse':
       category = '/'
+    else:
+      category = category[:-1]
     if self.isGpxe():
       self.redirect("%s/menu.gpxe" % (category,))
       return
-    if not category.endswith('/'):
-      self.redirect("%s/" % (category,))
-      return
-    if category != "/":
-      category = category[:-1]
     template_values = self.getTemplateValues()
     category = models.Category.get_by_key_name(category)
     template_values['category'] = category

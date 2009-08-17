@@ -18,7 +18,7 @@
       <ul>
         {% for subcategory in subcategories %}
           <li>
-            <a href="{{subcategory.path}}">{{subcategory.name|escape}}</a>
+            <a href="{{subcategory.path}}/">{{subcategory.name|escape}}</a>
             {% if subcategory.description %}
               <p>{{subcategory.description|truncatewords:20}}</p>
             {% endif %}
@@ -41,7 +41,7 @@
     {% endif %}
     <p>
       Chainload URL <a href="/help#chainload" title="What's this?">(?)</a>:
-      http://netboot.me{{category.path}}
+      http://netboot.me{{category.path}}/
     </p>
   </div>
 {% endblock %}

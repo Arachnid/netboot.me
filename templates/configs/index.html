@@ -4,7 +4,7 @@
 	<div id="featured" class="clear">
     {% for category in config.categories %}
       <p>{% for part in category.all_path_tuples %}
-        <a href="{{part.1}}">{{part.0}}</a> /
+        <a href="{{part.1}}/">{{part.0}}</a> /
       {% endfor %}</p>
     {% endfor %}
     <h2>{{config.name}}</h2>

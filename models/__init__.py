@@ -1,7 +1,22 @@
 import config
 
+from google.appengine.api import users
 from google.appengine.ext import db
 from google.appengine.ext.db import polymodel
+
+class UserAccount(db.Model):
+  user = db.UserProperty(required=True)
+  is_admin = db.BooleanProperty(required=True, default=False)
+  nickname = db.StringProperty(required=True)
+  
+  @classmethod
+  def get_current(cls):
+    user = users.get_current_user()
+    if not user:
+      return None
+    return cls.get_or_insert("user:%d" % user.user_id(), user=user,
+                             is_admin=users.is_current_user_admin(),
+                             nickname=user.nickname())
 
 class Category(db.Model):
   # An informative name for the category
@@ -46,6 +61,7 @@ class BootConfiguration(polymodel.PolyModel):
   name = db.TextProperty(required=True)
   description = db.TextProperty()
   created = db.DateTimeProperty(required=True, auto_now_add=True)
+  owner = db.ReferenceProperty(UserAccount)
 
   def generateMenuEntry(self):
     return ["kernel /%d/boot.gpxe" % (self.key().id(),)]
