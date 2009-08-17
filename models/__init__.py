@@ -94,6 +94,21 @@ class KernelBootConfiguration(BootConfiguration):
         ("Kernel arguments", self.args),
     ]
 
+class ImageBootConfiguration(BootConfiguration):
+  image = db.LinkProperty(required=True)
+  
+  def generateGpxeScript(self):
+    return [
+      "kernel -n img %s" % (self.image,),
+      "boot img"
+    ]
+
+  def typeName(self):
+    return "Binary image"
+  
+  def attributes(self):
+    return [("Image URL", formatUrlLink(self.image))]
+
 class MemdiskBootConfiguration(BootConfiguration):
   image = db.LinkProperty(required=True)
   

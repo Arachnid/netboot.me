@@ -1,0 +1,101 @@
+{% extends "../base.html" %}
+{% block title %}Getting Started{% endblock %}
+{% block body %}
+	<div id="featured" class="clear">
+    <h2>Using netboot.me</h2>
+    <p>There are several ways to boot into netboot.me, depending on your needs.</p>
+    
+    <h3>Booting from CD</h3>
+    <p>Download and save <a href="http://cloud.github.com/downloads/Arachnid/netboot.me-gpxe/netbootme.iso">netbootme.iso</a>,
+    then burn it to CD using your usual CD burning program. In linux, you can use
+    cdrecord, OSX users can use the built-in Disk Utility, and windows users can
+    use tools such as Nero Burning Rom.</p>
+    <p>Once you have burned netbootme.iso to a CD, make sure your target computer
+    is set up to boot from CD, insert the CD in the drive, and reboot it.</p>
+    
+    <h3>Booting from USB</h3>
+    <p>You can also boot from USB. To do so, download and save
+    <a href="http://cloud.github.com/downloads/Arachnid/netboot.me-gpxe/netbootme.usb">netbootme.usb</a>,
+    then follow the OS specific instructions below.</p>
+    
+    <h4>Writing a USB image in Linux</h4>
+    <p>Insert the USB key, and establish which device Linux has assigned to the
+    USB key. Then, enter the following command:
+    <code>dd if=netbootme.usb of=/dev/sdX</code>
+    where <em>/dev/sdX</em> is the device assigned to your USB key. Make sure
+    you enter the right device name - this will erase anything on the device
+    you choose!</p>
+    
+    <h4>Writing a USB image in Mac OSX</h4>
+    <p>Insert the USB key, and run <em>mount</em> to see what device OSX has
+    assigned to your USB key. You should see something like this:
+    <code>/dev/disk0s2 on / (hfs, local, journaled)<br />
+devfs on /dev (devfs, local)<br />
+fdesc on /dev (fdesc, union)<br />
+/dev/disk3s1 on /Volumes/UNTITLED (msdos, local, nodev, nosuid, noowners)</code>
+    The last line is your USB device. Unmount it and write the netboot.me image
+    to it with:
+    <code>sudo umount -f /dev/disk3s1<br />
+dd if=netbootme.usb of=/dev/disk3</code>
+    If successful, OSX will pop up an error dialog telling you it doesn't
+    recognize the disk. Click 'Eject', remove the USB key, and you're done.</p>
+    
+    <h4>Writing a USB image in Windows</h4>
+    <p>Coming soon...</p>
+    
+    <h3>Booting from floppy disk</h3>
+    <p>If you have a computer that still has a floppy drive, it's possible to
+    boot from that, too. Download and save <a href="http://cloud.github.com/downloads/Arachnid/netboot.me-gpxe/netbootme.dsk">netbootme.dsk</a>,
+    then follow the same steps as described above for writing the USB disk image.</p>
+    
+    <h3>Booting using tftp.netboot.me</h3>
+    <p>Most computers are capable of netbooting when configured correclty, without
+    the requirement of a boot disk of any sort. This can be used to bootstrap
+    from 'regular' netbooting to the HTTP-based approach used by netboot.me.
+    There are two major steps required to configure netbooting:</p>
+    
+    <h4>Setting up DHCP</h4>
+    <p>In order for your computer to know where to find the netboot servers,
+    you need to change your DHCP settings to return some extra information. The
+    two relevant pieces of information: next-server, which should be
+    "tftp.netboot.me", and "filename", which should be "netbootme.kpxe". How to
+    set these settings depends on your DHCP server. For dhcpd, simply add the
+    following to the relevant 'subnet' section of your configuration:
+    <code>    next-server "tftp.netboot.me"<br />    filename "netbootme.kpxe"</code>
+    For dnsmasq, the following line in /etc/dnsmasq.conf will achieve the same
+    effect: <code>dhcp-boot=netbootme.kpxe,tftp.netboot.me</code></p>
+    
+    <h4>Setting your computer to netboot</h4>
+    <p>How to configure your computer to netboot varies from computer to computer.
+    Many computers will automatically try to netboot if they don't find any bootable
+    devices. Check your BIOS settings to see if there's a way to explicitly enable
+    network booting, and to set its priority relative to other boot devices.
+    Some bioses also provide the option to netboot if you press a function key
+    while booting - watch your boot screen carefully.</p>
+    
+    <h4>Debugging</h4>
+    <p>The method described above relies on bootstrapping from your computer's
+    built in PXE (netboot) support by sending a copy of a more sophisticated
+    bootloader (gPXE) over TFTP, the Trivial File Transfer Protocol. Unfortunately,
+    TFTP isn't the most reliable protocol across the internet, and it doesn't
+    always work if the computer you're booting is behind NAT, either.</p>
+    <p>If you've completed the steps above and your computer can't download the
+    image, you may be running into such problems. Not to worry, though, there's
+    a simple alternative: you can host the bootstrap image yourself. See the
+    section below for instructions.</p>
+    
+    <h3>Booting using DHCP and your own TFTP server</h3>
+    <p>The option described above for netbooting is simple, but doesn't work for
+    everyone due to the issues inherent in using TFTP across the internet. You
+    can host your own copy of the bootstrap image, however, which will allow you
+    to use netboot.me without boot disks.</p>
+    <p>If you're using dnsmasq, doing this is really easy. Download
+    <a href="http://static.netboot.me/gpxe/netbootme.kpxe">netbootme.kxpe</a>
+    and save it to the machine running dnsmasq, under /var/lib/tftp. Then, add
+    the following lines to /etc/dnsmasq.conf:
+    <code>enable-tftp<br />tftp-root=/etc/dnsmasq.conf<br />dhcp-boot=netbootme.kpxe</code></p>
+    <p>If you're using DHCPd, you'll need to set up your own TFTP server -
+    tftpd-hal is a good choice. Once you've set it up, add the location of your
+    TFTP server to the DHCPd configuration file, as shown above.</p>
+	</div>
+{% endblock %}
