@@ -15,7 +15,10 @@
         <a href="{{part.1}}/">{{part.0}}</a> /
       {% endfor %}</p>
     {% endfor %}
-    <h2>{{config.name}}</h2>
+    <h2>
+      {{config.name}}
+      {% if config.deprecated %}(deprecated){% endif %}
+    </h2>
     <p>{{config.description}}</p>
     <table>
       <tr><th>Created</th><td>{{config.created|date:"Y/m/d"}}</td></tr>
