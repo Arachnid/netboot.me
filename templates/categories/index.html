@@ -2,6 +2,11 @@
 {% block title %}{{category.name}}{% endblock %}
 {% block body %}
 	<div id="featured" class="clear">
+    {% if user and user.is_admin %}
+      <a class="admin" href="add.do">Add Subcategory</a>
+      <a class="admin" href="delete.do">Delete</a>
+      <a class="admin" href="edit.do">Edit</a>
+    {% endif %}
     {% ifnotequal category.path "/" %}
       <span>
         {% for part in category.path_tuples %}

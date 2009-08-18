@@ -14,9 +14,9 @@ class UserAccount(db.Model):
     user = users.get_current_user()
     if not user:
       return None
-    return cls.get_or_insert("user:%d" % user.user_id(), user=user,
+    return cls.get_or_insert("user:%s" % user.user_id(), user=user,
                              is_admin=users.is_current_user_admin(),
-                             nickname=user.nickname())
+                             nickname=user.nickname().split("@")[0])
 
 class Category(db.Model):
   # An informative name for the category
