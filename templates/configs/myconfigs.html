@@ -7,11 +7,12 @@
 
     {% if configs %}
       <table>
-        <thead><tr><th>Name</th><th>Type</th><th>Created</th></tr></thead>
+        <thead><tr><th>Name</th><th>Type</th><th>Public?</th><th>Created</th></tr></thead>
         {% for config in configs %}
           <tr>
             <th><a href="/{{config.key.id}}">{{config.name}}</a></th>
             <td>{{config.typeName}}</td>
+            <td>{% if config.public %}Yes{% else %}No{% endif %}</td>
             <td>{{config.created|date:"Y/m/d"}}</td>
           </tr>
         {% endfor %}
@@ -21,11 +22,12 @@
     {% if deprecated %}
       <h3>Deprecated configs</h3>
       <table>
-        <thead><tr><th>Name</th><th>Type</th><th>Created</th></tr></thead>
+        <thead><tr><th>Name</th><th>Type</th><th>Public?</th><th>Created</th></tr></thead>
         {% for config in deprecated %}
           <tr>
             <th><a href="/{{config.key.id}}">{{config.name}}</a></th>
             <td>{{config.typeName}}</td>
+            <td>{% if config.public %}Yes{% else %}No{% endif %}</td>
             <td>{{config.created|date:"Y/m/d"}}</td>
           </tr>
         {% endfor %}
