@@ -1,0 +1,36 @@
+{% extends "../base.html" %}
+{% block title %}Create new configuration{% endblock %}
+{% block head %}
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
+  <script type="text/javascript">
+    function setVisibility(val) {
+      switch(val) {
+      case "kernel":
+        $("#initrd").parents("tr").show();
+        $("#args").parents("tr").show();
+        break;
+      case "image":
+      case "memdisk":
+        $("#initrd").parents("tr").hide();
+        $("#args").parents("tr").hide();
+      }
+    }
+    $(document).ready(function() {
+      setVisibility($("#imagetype option[selected]").val());
+      $("#imagetype").change(function() {
+        setVisibility(this.value);
+      });
+    });
+  </script>
+{% endblock %}
+{% block body %}
+	<div id="featured" class="clear">
+    <h2>Create new configuration</h2>
+    <form method="post" action="/newconfig.do">
+      <table>
+        {{form.as_table}}
+      </table>
+      <input type="submit" value="Create" />
+    </form>
+	</div>
+{% endblock %}

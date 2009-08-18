@@ -21,7 +21,10 @@ application = webapp.WSGIApplication([
   # Individual boot entry page
   ('/([0-9]+)', BootConfigHandler),
   ('/([0-9]+)/edit.do', EditConfigHandler),
-  ('/newconfig.do', NewConfigHandler),
+  
+  # List of a user's configs
+  ('/my/configs', MyConfigsHandler),
+  ('/my/newconfig', NewConfigHandler),
   
   # Individual boot gpxe script
   ('/([0-9]+)/boot.gpxe', BootGpxeHandler),

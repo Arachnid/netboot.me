@@ -122,6 +122,18 @@ class NewConfigHandler(base.BaseHandler):
     template_values['form'] = form
     self.renderTemplate("create.html", template_values)
 
+class MyConfigsHandler(base.BaseHandler):
+  @base.loggedIn
+  def get(self):
+    q = models.BootConfiguration.all()
+    q.filter("owner =", self.user)
+    all_configs = q.fetch(1000)
+    
+    template_values = self.getTemplateValues()
+    template_values['configs'] = [x for x in all_configs if not x.deprecated]
+    template_values['deprecated'] = [x for x in all_configs if x.deprecated]
+    self.renderTemplate("myconfigs.html", template_values)
+
 class BootGpxeHandler(base.BaseHandler):
   """Serves up gPXE scripts to boot directly to a given config."""
   def get(self, id):

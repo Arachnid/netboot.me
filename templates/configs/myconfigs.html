@@ -1,0 +1,39 @@
+{% extends "../base.html" %}
+{% block title %}My configs{% endblock %}
+{% block body %}
+	<div id="featured" class="clear">
+    <span class="admin"><a href="/my/newconfig">New</a></span>
+    <h2>My configs</h2>
+
+    {% if configs %}
+      <table>
+        <thead><tr><th>Name</th><th>Type</th><th>Created</th></tr></thead>
+        {% for config in configs %}
+          <tr>
+            <th><a href="/{{config.key.id}}">{{config.name}}</a></th>
+            <td>{{config.typeName}}</td>
+            <td>{{config.created|date:"Y/m/d"}}</td>
+          </tr>
+        {% endfor %}
+      </table>
+    {% endif %}
+
+    {% if deprecated %}
+      <h3>Deprecated configs</h3>
+      <table>
+        <thead><tr><th>Name</th><th>Type</th><th>Created</th></tr></thead>
+        {% for config in deprecated %}
+          <tr>
+            <th><a href="/{{config.key.id}}">{{config.name}}</a></th>
+            <td>{{config.typeName}}</td>
+            <td>{{config.created|date:"Y/m/d"}}</td>
+          </tr>
+        {% endfor %}
+      </table>
+    {% endif %}
+    
+    {% if not configs and not deprecated %}
+      <p>You don't currently have any configs. Create one with the link on the right!</p>
+    {% endif %}
+	</div>
+{% endblock %}
