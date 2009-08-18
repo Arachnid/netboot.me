@@ -4,10 +4,10 @@
 	<div id="featured" class="clear">
     {% if user %}
       {% if user.is_admin %}
-        <a class="admin" href="edit.do">Edit</a>
+        <a class="admin" href="/{{config.key.id}}/edit.do">Edit</a>
       {% endif %}
       {% ifequal user.user config.owner %}
-        <a class="admin" href="edit.do">Edit</a>
+        <a class="admin" href="/{{config.key.id}}/edit.do">Edit</a>
       {% endifequal %}
     {% endif %}
     {% for category in config.categories %}

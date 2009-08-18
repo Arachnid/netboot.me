@@ -10,6 +10,14 @@ from google.appengine.api import users
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp import template
 
+def loggedIn(fun):
+  def decorate(self, *args, **kwargs):
+    if not self.user:
+      self.redirect(users.create_login_url(self.request.url))
+    else:
+      fun(self, *args, **kwargs)
+  return decorate
+
 class BaseHandler(webapp.RequestHandler):
   def initialize(self, request, response):
     super(BaseHandler, self).initialize(request, response)

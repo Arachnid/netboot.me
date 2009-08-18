@@ -20,6 +20,7 @@ application = webapp.WSGIApplication([
 
   # Individual boot entry page
   ('/([0-9]+)', BootConfigHandler),
+  ('/([0-9]+)/edit.do', EditConfigHandler),
   
   # Individual boot gpxe script
   ('/([0-9]+)/boot.gpxe', BootGpxeHandler),

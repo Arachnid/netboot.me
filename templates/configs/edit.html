@@ -1,0 +1,13 @@
+{% extends "../base.html" %}
+{% block title %}Editing {{config.name|escape}}{% endblock %}
+{% block body %}
+	<div id="featured" class="clear">
+    <h2>Edit configuration</h2>
+    <form method="post" action="/{{config.key.id}}/edit.do">
+      <table>
+        {{form.as_table}}
+      </table>
+      <input type="submit" value="Update" />
+    </form>
+	</div>
+{% endblock %}

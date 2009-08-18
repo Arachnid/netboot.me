@@ -1,4 +1,4 @@
 from docs import DocHandler
 from index import IndexHandler
 from categories import CategoryHandler, GpxeHandler, MenuHandler
-from configs import BootConfigHandler, BootGpxeHandler
+from configs import BootConfigHandler, EditConfigHandler, BootGpxeHandler
