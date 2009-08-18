@@ -9,13 +9,27 @@ class EditConfigForm(forms.Form):
   deprecated = forms.BooleanField(required=False)
 
 class CreateConfigForm(forms.Form):
-  type = forms.ChoiceField(choices=(
-      ("kernel", "Linux Kernel"),
-      ("image", "Raw image file"),
-      ("memdisk", "Disk image")))
-  kernel = forms.URLField(verify_exists=True)
-  initrd = forms.URLField(verify_exists=True)
-  args = forms.CharField()
+  name = forms.CharField(max_length=255)
+  description = forms.CharField(widget=forms.widgets.Textarea())
+  type = forms.ChoiceField(
+      widget=forms.widgets.Select(attrs={'id':"imagetype"}),
+      choices=(
+        ("kernel", "Linux Kernel"),
+        ("image", "Raw image file"),
+        ("memdisk", "Disk image")),
+      initial="kernel")
+  kernel = forms.URLField(widget=forms.widgets.TextInput(attrs={'id':"kernel"}),
+                          label="Kernel/Image")
+  initrd = forms.URLField(widget=forms.widgets.TextInput(attrs={'id':"initrd"}),
+                          required=False)
+  args = forms.CharField(widget=forms.widgets.TextInput(attrs={'id':"args"}),
+                         required=False)
+
+config_model_map = {
+    "kernel": models.KernelBootConfiguration,
+    "image": models.ImageBootConfiguration,
+    "memdisk": models.MemdiskBootConfiguration,
+}
 
 def hasConfig(fun):
   def decorate(self, id, *args, **kwargs):
@@ -75,6 +89,38 @@ class EditConfigHandler(base.BaseHandler):
     template_values['config'] = config
     template_values['form'] = form
     self.renderTemplate("edit.html", template_values)
+
+class NewConfigHandler(base.BaseHandler):
+  """Create new configurations."""
+  @base.loggedIn
+  def get(self):
+    self.renderForm(CreateConfigForm())
+  
+  @base.loggedIn
+  def post(self):
+    form = CreateConfigForm(self.request.POST)
+    if form.is_valid():
+      args = {
+          'name': form.clean_data['name'],
+          'description': form.clean_data['description'],
+          'owner': self.user,
+      }
+      if form.clean_data['type'] == "kernel":
+        args['kernel'] = form.clean_data['kernel']
+        args['initrd'] = form.clean_data['initrd']
+        args['args'] = form.clean_data['args']
+      elif form.clean_data['type'] in ("image", "memdisk"):
+        args['image'] = form.clean_data['kernel']
+      config = config_model_map[form.clean_data['type']](**args)
+      config.put()
+      self.redirect('/%d' % (config.key().id(),))
+    else:
+      self.renderForm(form)
+  
+  def renderForm(self, form):
+    template_values = self.getTemplateValues()
+    template_values['form'] = form
+    self.renderTemplate("create.html", template_values)
 
 class BootGpxeHandler(base.BaseHandler):
   """Serves up gPXE scripts to boot directly to a given config."""
