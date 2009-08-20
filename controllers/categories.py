@@ -18,6 +18,9 @@ class CategoryHandler(base.BaseHandler):
       return
     template_values = self.getTemplateValues()
     category = models.Category.get_by_key_name(category)
+    if not category:
+      self.error(404)
+      return
     template_values['category'] = category
     template_values['subcategories'] = category.subcategories.fetch(100)
     self.renderTemplate("index.html", template_values)

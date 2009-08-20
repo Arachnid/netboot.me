@@ -23,8 +23,9 @@ class BaseHandler(webapp.RequestHandler):
     super(BaseHandler, self).initialize(request, response)
     self.user = models.UserAccount.get_current()
   
-  def getTemplatePath(self, template):
-    module = self.__module__.rpartition('.')[2]
+  def getTemplatePath(self, template, module=None):
+    if not module:
+      module = self.__module__.rpartition('.')[2]
     return os.path.join('templates', module , template)
   
   def renderTemplate(self, template_name, template_values):
@@ -39,6 +40,17 @@ class BaseHandler(webapp.RequestHandler):
                      else users.create_logout_url(self.request.url)),
         'path': self.request.path
     }
+  
+  def error(self, code, detail=None):
+    self.response.set_status(code)
+    template_values = self.getTemplateValues()
+    template_values['code'] = code
+    template_values['message'] = self.response.http_status_message(code)
+    template_values['detail'] = detail
+    error_template = self.getTemplatePath("%d.html" % (code,), module="errors")
+    if not os.path.exists(error_template):
+      error_template = self.getTemplatePath("error.html", module="errors")
+    self.response.out.write(template.render(error_template, template_values))
 
   def isGpxe(self):
     return self.request.headers.get('User-Agent', '').startswith('gPXE')

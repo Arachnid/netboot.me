@@ -1,0 +1,11 @@
+{% extends "../base.html" %}
+{% block title %}{{code}} {{message}}{% endblock %}
+{% block body %}
+	<div id="featured" class="clear">
+    <h2>{{code}} {{message}}</h2>
+    <p>An error occurred while processing your request.</p>
+    {% if detail %}
+      <p>{{detail}}</p>
+    {% endif %}
+	</div>
+{% endblock %}
