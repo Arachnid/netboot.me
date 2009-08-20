@@ -11,22 +11,19 @@
 	<div id="header">			
 		<h1 id="logo-text"><a href="/" title="">netboot.me</a></h1>		
 		<p id="slogan">Boot anything, anywhere, anytime</p>	
-    <p id="login">
-      {% if user %}
-        Logged in as {{user.nickname}}<br />
-        <a href="{{auth_url}}">Log out</a>
-      {% else %}
-        <a href="{{auth_url}}">Log in</a>
-      {% endif %}
-    </p>
 		<div  id="nav">
 			<ul>
+        {% if user %}
+          <li class="right"><a href="{{auth_url}}">Log out</a></li>
+        {% else %}
+          <li class="right"><a href="{{auth_url}}">Log in</a></li>
+        {% endif %}
 				<li class="first" {% ifequal handler "IndexHandler" %}id="current"{% endifequal %}><a href="/">Home</a></li>
         <li {% ifequal path "/gettingstarted" %}id="current"{% endifequal %}><a href="/gettingstarted">Getting Started</a></li>
         <li {% ifequal path "/help" %}id="current"{% endifequal %}><a href="/help">Help</a></li>
         <li {% ifequal handler "CategoryHandler" %}id="current"{% endifequal %}{% ifequal handler "BootConfigHandler" %}id="current"{% endifequal %}><a href="/browse">Packages</a></li>
         {% if user %}
-          <li {% ifequal handler "UserConfigsHandler" %}id="current"{% endifequal %}><a href="/my/configs">My Configs</a></li>
+          <li {% ifequal handler "MyConfigsHandler" %}id="current"{% endifequal %}><a href="/my/configs">My Configs</a></li>
         {% endif %}
 			</ul>
 		</div>	

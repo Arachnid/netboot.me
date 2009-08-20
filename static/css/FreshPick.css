@@ -222,15 +222,6 @@ input.button {
 	top: 102px; left: 32px;		
 }
 
-#header p#login {
-  position: absolute;
-  margin: 0; padding: 0 5px 0 0;
-  top: 50px; right: 0;
-  width: 125px;
-  text-align: center;
-  z-index: 1;
-}
-
 #header #header-image {
 	position: absolute;
 	top: 12px; right: 30px;
@@ -257,6 +248,11 @@ input.button {
 #header #nav ul li {
 	float: left;
 	margin: 0; padding: 0;			
+}
+#header #nav ul li.right {
+  position: absolute;
+  right: 15px;
+  z-index: 1;
 }
 #header #nav ul li a:link,
 #header #nav ul li a:visited {
