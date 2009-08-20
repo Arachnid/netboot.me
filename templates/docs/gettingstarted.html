@@ -1,19 +1,34 @@
 {% extends "../base.html" %}
 {% block title %}Getting Started{% endblock %}
+{% block head %}
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $("h3").css("cursor", "pointer").next().hide();
+      $("h3").click(function() {
+        $(this).next().slideToggle("normal");
+      });
+    });
+  </script>
+{% endblock %}
 {% block body %}
 	<div id="featured" class="clear">
     <h2>Using netboot.me</h2>
-    <p>There are several ways to boot into netboot.me, depending on your needs.</p>
+    <p>There are several ways to boot into netboot.me, depending on your needs.
+    Click on a heading for specific instructions.</p>
     
     <h3>Booting from CD</h3>
+    <div>
     <p>Download and save <a href="http://static.netboot.me/gpxe/netbootme.iso">netbootme.iso</a>,
     then burn it to CD using your usual CD burning program. In linux, you can use
     cdrecord, OSX users can use the built-in Disk Utility, and windows users can
     use tools such as Nero Burning Rom.</p>
     <p>Once you have burned netbootme.iso to a CD, make sure your target computer
     is set up to boot from CD, insert the CD in the drive, and reboot it.</p>
+    </div>
     
     <h3>Booting from USB</h3>
+    <div>
     <p>You can also boot from USB. To do so, download and save
     <a href="http://static.netboot.me/gpxe/netbootme.usb">netbootme.usb</a>,
     then follow the OS specific instructions below.</p>
@@ -42,13 +57,17 @@ dd if=netbootme.usb of=/dev/disk3</code>
     
     <h4>Writing a USB image in Windows</h4>
     <p>Coming soon...</p>
+    </div>
     
     <h3>Booting from floppy disk</h3>
+    <div>
     <p>If you have a computer that still has a floppy drive, it's possible to
     boot from that, too. Download and save <a href="http://static.netboot.me/gpxe/netbootme.dsk">netbootme.dsk</a>,
     then follow the same steps as described above for writing the USB disk image.</p>
+    </div>
     
     <h3>Booting using tftp.netboot.me</h3>
+    <div>
     <p>Most computers are capable of netbooting when configured correclty, without
     the requirement of a boot disk of any sort. This can be used to bootstrap
     from 'regular' netbooting to the HTTP-based approach used by netboot.me.
@@ -83,8 +102,10 @@ dd if=netbootme.usb of=/dev/disk3</code>
     image, you may be running into such problems. Not to worry, though, there's
     a simple alternative: you can host the bootstrap image yourself. See the
     section below for instructions.</p>
+    </div>
     
     <h3>Booting using DHCP and your own TFTP server</h3>
+    <div>
     <p>The option described above for netbooting is simple, but doesn't work for
     everyone due to the issues inherent in using TFTP across the internet. You
     can host your own copy of the bootstrap image, however, which will allow you
@@ -97,5 +118,6 @@ dd if=netbootme.usb of=/dev/disk3</code>
     <p>If you're using DHCPd, you'll need to set up your own TFTP server -
     tftpd-hal is a good choice. Once you've set it up, add the location of your
     TFTP server to the DHCPd configuration file, as shown above.</p>
+    </div>
 	</div>
 {% endblock %}

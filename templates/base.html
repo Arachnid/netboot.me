@@ -23,6 +23,7 @@
 			<ul>
 				<li class="first" {% ifequal handler "IndexHandler" %}id="current"{% endifequal %}><a href="/">Home</a></li>
         <li {% ifequal path "/gettingstarted" %}id="current"{% endifequal %}><a href="/gettingstarted">Getting Started</a></li>
+        <li {% ifequal path "/help" %}id="current"{% endifequal %}><a href="/help">Help</a></li>
         <li {% ifequal handler "CategoryHandler" %}id="current"{% endifequal %}{% ifequal handler "BootConfigHandler" %}id="current"{% endifequal %}><a href="/browse">Packages</a></li>
         {% if user %}
           <li {% ifequal handler "UserConfigsHandler" %}id="current"{% endifequal %}><a href="/my/configs">My Configs</a></li>

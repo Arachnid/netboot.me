@@ -8,7 +8,7 @@ handlers:
   script: $PYTHON_LIB/google/appengine/ext/remote_api/handler.py
   login: admin
 
-- url: /(?:/[a-zA-Z].*/)?(menu.c32|vesamenu.c32)
+- url: (/(?:[a-zA-Z][a-zA-Z0-9]*/)*)(menu.c32|vesamenu.c32)
   static_files: static/\1
   upload: static/(menu.c32|vesamenu.c32)
 

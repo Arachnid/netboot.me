@@ -1,0 +1,97 @@
+{% extends "../base.html" %}
+{% block title %}Help{% endblock %}
+{% block body %}
+	<div id="featured" class="clear">
+    <h2>Help</h2>
+    <h3>Table of Contents</h3>
+    <ul>
+      <li><a href="#whatis">What is netboot.me?</a></li>
+      <li><a href="#why">Why would I use netboot.me?</a></li>
+      <li><a href="#download">Where can I get the bootloaders?</a></li>
+      <li><a href="#oss">Is netboot.me Open Source Software?</a></li>
+      <li><a href="#chainload">What are all these 'chainload URLs'?</a></li>
+    </ul>
+    
+    <a name="whatis"><h3>What is netboot.me?</h3></a>
+    <p>netboot.me is a service that allows you to boot nearly any operating system
+    or tool on any computer with a wired internet connection - without having to
+    know ahead of time what tools you need. Once you can netboot.me, you never
+    need to update your tools again!</p>
+    
+    <p>netboot.me works through the magic of netbooting. There are a number of
+    ways to boot a computer with netboot.me. The simplest is to
+    <a href="/gettingstarted">download</a> a bootable image and burn it to a CD, USB
+    memory stick, or floppy disk. Boot off it on any networked computer, and it
+    will automatically fetch the latest boot options from netboot.me and let you
+    choose from dozens of installation, recovery, testing, portable desktop and
+    other tools. You can also start netboot.me from any computer running gPXE,
+    or from any netbootable computer with some simple tweaks to your DHCP server.</p>
+    
+    <a name="why"><h3>Why would I use netboot.me?</h3></a>
+    <p>netboot.me is useful in a number of situations. You can use it as an installer
+    for any number of operating systems and distros, as a rescue disk for a wide
+    variety of setups, as a testing and diagnostic utility for memory, disk, CPU
+    and other components, or even as an instant desktop environment!</p>
+    <p>The most important advantage of netboot.me is that you don't have to plan
+    ahead in order to take advantage of it. Often, you don't know you're going
+    to need a diagnostic tool until you do - at which point it may be too late
+    to download it! You can download the netboot.me bootloader once, keep it
+    with you when you might need it, and never have to worry about updates again.</p>
+    <p>Another advantage of netboot.me is for performing OS installations.
+    When you download a distribution of Linux or another OSS operating system, 
+    much of the software on it is already obsolete, requiring you to upgrade it
+    as soon as you finish installing. With netboot installations, however, the
+    downloaded packages are always the latest, eliminating the need for an update
+    and reducing the total amount you have to download.</p>
+    
+    <a name="download"><h3>Where can I get the bootloaders?</h3></a>
+    <p>Right here:</p>
+    <table>
+      <tr><th>Download</th><th>Description</th><th>MD5</th><th>SHA1</th></tr>
+      <tr>
+        <td><a href="http://static.netboot.me/gpxe/netbootme.usb">netbootme.usb</a></td>
+        <td>USB Disk Image</td>
+        <td>1359617de1ac73017c80d79d1876629f</td>
+        <td>aa863deacef71a3287e06fa251b3c4822ad3f28a</td>
+      </tr>
+      <tr>
+        <td><a href="http://static.netboot.me/gpxe/netbootme.iso">netbootme.iso</a></td>
+        <td>CD Image</td>
+        <td>7f673c4fe5173da11cbbdf78c9dac8a5</td>
+        <td>96567594a3f2a2238225858acb58cc80b0065f7a</td>
+      </tr>
+      <tr>
+        <td><a href="http://static.netboot.me/gpxe/netbootme.dsk">netbootme.dsk</a></td>
+        <td>Floppy Disk Image</td>
+        <td>edc2d1a2efa9128a7c09c06bec912508</td>
+        <td>149821fd041456b1ebf4ce61878e604a762dde77</td>
+      </tr>
+      <tr>
+        <td><a href="http://static.netboot.me/gpxe/netbootme.kpxe">netbootme.kpxe</a></td>
+        <td>Netboot binary</td>
+        <td>008d2132ab713b09af6bb0de1c0e5682</td>
+        <td>5750278d4a6a1efa0f1da1735dd69defb328f76d</td>
+      </tr>
+    </table>
+    <p>Installation instructions for all these images can be found <a href="/gettingstarted">here</a>.</p>
+    
+    <a name="#oss"><h3>Is netboot.me Open Source Software?</h3></a>
+    <p>Yes! netboot.me is licensed under the BSD license. You can find the source
+    for the site <a href="http://github.com/arachnid/netboot.me/">here</a>,
+    and the source for the modified version of the gPXE bootloader used by netboot.me
+    <a href="http://github.com/arachnid/netboot.me-gpxe">here</a>. Contributions
+    are welcomed. If you'd like to create your own netboot.me clone, you're
+    welcome to, but please credit the original!</p>
+    
+    <a name="#chainload"><h3>What are all these 'chainload URLs'?</h3></a>
+    <p>When you know exactly what you want to boot, it can be convenient to
+    bypass some or all of the menu system. The chainload URLs exist to facilitate
+    that. To boot directly into a configuration, start up your computer as you
+    would normally when booting netboot.me, and press Ctrl+B when prompted.
+    Then, type "autoboot" to detect and initialize your network interfaces. When
+    that returns, type "chain &lt;url>". Where &lt;url> is the chainload URL
+    displayed on the relevant configuration page. For example, to boot directly
+    into Memtest 86, you would type the following at the gPXE command prompt:
+    <code>gPXE> autoboot<br />gPXE> chain http://netboot.me/1001</code>.</p>
+	</div>
+{% endblock %}

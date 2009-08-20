@@ -10,7 +10,7 @@ from controllers import *
 application = webapp.WSGIApplication([
   # Homepage
   ('/', IndexHandler),
-  ('/(gettingstarted)', DocHandler),
+  ('/(gettingstarted|help)', DocHandler),
 
   # Category gpxe script (loads category menu)
   ('(/(?:[a-zA-Z][a-zA-Z0-9]*/)*)menu.gpxe', GpxeHandler), 
