@@ -9,6 +9,7 @@
     {% endif %}
     {% ifnotequal category.path "/" %}
       <span>
+        <a href="/browse/">browse</a> /
         {% for part in category.path_tuples %}
           <a href="/browse{{part.1}}/">{{part.0}}</a> /
         {% endfor %}
