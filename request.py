@@ -12,15 +12,18 @@ application = webapp.WSGIApplication([
   ('/', IndexHandler),
   ('/(gettingstarted|help)', DocHandler),
 
-  # Category gpxe script (loads category menu)
-  ('(/(?:[a-zA-Z][a-zA-Z0-9]*/)*)menu.gpxe', GpxeHandler), 
+  # Category page
+  ('/browse(/(?:[a-zA-Z][a-zA-Z0-9]*/)*)', CategoryHandler),
+
+  # Gpxe script (loads category menu)
+  ('/browse(/(?:[a-zA-Z][a-zA-Z0-9]*/)*)menu.gpxe|/menu.gpxe', GpxeHandler), 
 
   # Category menu definition
-  ('(/(?:[a-zA-Z][a-zA-Z0-9]*/)*)menu.cfg', MenuHandler),
+  ('/browse(/(?:[a-zA-Z][a-zA-Z0-9]*/)*)menu.cfg|/menu.cfg', MenuHandler),
 
   # Individual boot entry page
   ('/([0-9]+)', BootConfigHandler),
-  ('/([0-9]+)/edit.do', EditConfigHandler),
+  ('/([0-9]+)/edit', EditConfigHandler),
   
   # List of a user's configs
   ('/my/configs', MyConfigsHandler),
@@ -28,9 +31,6 @@ application = webapp.WSGIApplication([
   
   # Individual boot gpxe script
   ('/([0-9]+)/boot.gpxe', BootGpxeHandler),
-
-  # Category page
-  ('(/(?:[a-zA-Z][a-zA-Z0-9]*/)*|/browse)', CategoryHandler),
 ], debug=config.on_dev_server)
 
 def main():

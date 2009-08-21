@@ -7,17 +7,14 @@ from google.appengine.ext import db
 
 class CategoryHandler(base.BaseHandler):
   """Serves end-user category pages, and redirects to GpxeHandler for gPXE."""
-  def get(self, category):
-    logging.debug(category)
-    if category == '/browse':
-      category = '/'
-    else:
-      category = category[:-1]
+  def get(self, category_name):
+    if category_name != '/':
+      category_name = category_name[:-1] # Remove the trailing /
     if self.isGpxe():
-      self.redirect("%s/menu.gpxe" % (category,))
+      self.redirect("/browse%s/menu.gpxe" % (category_name,))
       return
     template_values = self.getTemplateValues()
-    category = models.Category.get_by_key_name(category)
+    category = models.Category.get_by_key_name(category_name)
     if not category:
       self.error(404)
       return
@@ -28,11 +25,14 @@ class CategoryHandler(base.BaseHandler):
 class GpxeHandler(base.BaseHandler):
   """Serves up gPXE scripts to boot the category menu."""
   def get(self, category):
+    if not category:
+      category = '/'
     menutype = self.request.GET.get("menutype", "vesa")
     if menutype == "text":
       menufile = "menu.c32"
     else:
       menufile = "vesamenu.c32"
+    menupath = category + menufile
     self.response.headers['Content-Type'] = 'text/plain'
     self.response.out.write("#!gpxe\n")
     self.response.out.write("chain %s menu.cfg\n" % (menufile,))
@@ -109,6 +109,10 @@ def getConfig(category_name):
 class MenuHandler(base.BaseHandler):
   """Serves up netboot menu files for the category."""
   def get(self, category_name):
+    if not category_name:
+      category_name = '/'
+    else:
+      category_name = category_name[:-1]
     category, config = getConfig(category_name)
     if not category:
       self.error(404)
