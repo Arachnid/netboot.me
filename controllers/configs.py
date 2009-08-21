@@ -6,10 +6,6 @@ from django import newforms as forms
 class BaseConfigForm(forms.Form):
   name = forms.CharField(max_length=255)
   description = forms.CharField(widget=forms.widgets.Textarea())
-  public = forms.BooleanField(
-      required=False,
-      help_text="Public configs will be considered for inclusion in the menu " +
-                "system.")
 
 class EditConfigForm(BaseConfigForm):
   deprecated = forms.BooleanField(required=False)
@@ -73,7 +69,6 @@ class EditConfigHandler(base.BaseHandler):
         'name': config.name,
         'description': config.description,
         'deprecated': config.deprecated,
-        'public': config.public,
     })
     self.renderForm(config, form)
 
@@ -84,7 +79,6 @@ class EditConfigHandler(base.BaseHandler):
       config.name = form.clean_data['name']
       config.description = form.clean_data['description']
       config.deprecated = bool(form.clean_data['deprecated'])
-      config.public = bool(form.clean_data['public'])
       config.put()
       self.redirect("/%d" % (config.key().id(),))
     else:
@@ -110,7 +104,6 @@ class NewConfigHandler(base.BaseHandler):
           'name': form.clean_data['name'],
           'description': form.clean_data['description'],
           'owner': self.user,
-          'public': form.clean_data['public'],
       }
       if form.clean_data['type'] == "kernel":
         args['kernel'] = form.clean_data['kernel']
