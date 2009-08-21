@@ -8,7 +8,7 @@ from google.appengine.ext import db
 
 class EditCategoryForm(forms.Form):
   name = forms.CharField()
-  description = forms.CharField(widget=forms.widgets.Textarea())
+  description = forms.CharField(required=False, widget=forms.widgets.Textarea())
 
 class CreateCategoryForm(EditCategoryForm):
   path = forms.CharField()
