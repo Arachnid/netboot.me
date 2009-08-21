@@ -18,6 +18,15 @@ def loggedIn(fun):
       fun(self, *args, **kwargs)
   return decorate
 
+def isAdmin(fun):
+  @loggedIn
+  def decorate(self, *args, **kwargs):
+    if not self.user.is_admin:
+      self.error(401)
+    else:
+      fun(self, *args, **kwargs)
+  return decorate
+
 class BaseHandler(webapp.RequestHandler):
   def initialize(self, request, response):
     super(BaseHandler, self).initialize(request, response)

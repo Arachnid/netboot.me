@@ -134,13 +134,15 @@ class CategoryActionHandler(base.BaseHandler):
       'delete': lambda x=None: None,
   }
   
+  @base.isAdmin
   def get(self, category_name, action):
     category = models.Category.get_by_key_name(category_name)
     if not category:
       self.error(404)
       return
     self.renderForm(action, category)
-  
+
+  @base.isAdmin
   def post(self, category_name, action):
     category = models.Category.get_by_key_name(category_name)
     if not category:
