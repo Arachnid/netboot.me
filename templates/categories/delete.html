@@ -1,0 +1,11 @@
+{% extends "../base.html" %}
+{% block title %}Deleting category "{{category.name}}"{% endblock %}
+{% block body %}
+	<div id="featured" class="clear">
+    <h2>Deleting category "{{category.name}}"</h2>
+    <form method="post" action="/browse{{category.path}}delete">
+      <p>Are you sure you want to delete this category?</p>
+      <input type="submit" value="Delete" />
+    </form>
+	</div>
+{% endblock %}

@@ -3,14 +3,14 @@
 {% block body %}
 	<div id="featured" class="clear">
     {% if user and user.is_admin %}
-      <a class="admin" href="add.do">Add Subcategory</a>
-      <a class="admin" href="delete.do">Delete</a>
-      <a class="admin" href="edit.do">Edit</a>
+      <a class="admin" href="add">Add Subcategory</a>
+      <a class="admin" href="delete">Delete</a>
+      <a class="admin" href="edit">Edit</a>
     {% endif %}
     {% ifnotequal category.path "/" %}
       <span>
         {% for part in category.path_tuples %}
-          <a href="/browse{{part.1}}">{{part.0}}</a> /
+          <a href="/browse{{part.1}}/">{{part.0}}</a> /
         {% endfor %}
       </span>
     {% endifnotequal %}
@@ -23,7 +23,7 @@
       <ul>
         {% for subcategory in subcategories %}
           <li>
-            <a href="/browse{{subcategory.path}}/">{{subcategory.name|escape}}</a>
+            <a href="/browse{{subcategory.path}}">{{subcategory.name|escape}}</a>
             {% if subcategory.description %}
               <p>{{subcategory.description|truncatewords:20}}</p>
             {% endif %}

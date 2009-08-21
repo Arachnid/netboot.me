@@ -1,5 +1,13 @@
 import models
 
+def createCategory(path):
+  name = path.split('/')[-2]
+  if not name:
+    name = '/'
+  cat = models.Category(key_name=path, path=path, name=name, depth=path.count('/')-1)
+  cat.put()
+  return cat
+
 kernel = 'http://archive.ubuntu.com/ubuntu/dists/jaunty/main/installer-i386/current/images/netboot/ubuntu-installer/i386/linux'
 initrd = 'http://archive.ubuntu.com/ubuntu/dists/jaunty/main/installer-i386/current/images/netboot/ubuntu-installer/i386/initrd.gz'
 jaunty_install = models.KernelBootConfiguration(name='Install', description='Regular Ubuntu installer', kernel=kernel, initrd=initrd, args='vga=normal -- quiet')
@@ -20,16 +28,21 @@ jaunty_rescue = models.KernelBootConfiguration(name='Jaunty (9.04) x86 rescue', 
 karmic_rescue = models.KernelBootConfiguration(name='Karmic (9.10) x86 rescue', description='Rescue image for Ubuntu Karmic (9.10) x86', kernel=karmic_install.kernel, initrd=karmic_install.initrd, args=jaunty_rescue.args)
 db.put([karmic_rescue, jaunty_rescue])
 
-menu_root = models.Category.create('/', name='netboot.me boot menu')
-installers = models.Category.create('/install')
-rescue = models.Category.create('/rescue')
-linux_installers = models.Category.create('/install/linux')
-linux_rescue = models.Category.create('/rescue/linux')
-ubuntu_install = models.Category.create('/install/linux/ubuntu')
-ubuntu_rescue = models.Category.create('/rescue/linux/ubuntu')
-jaunty_install_menu = models.Category.create('/install/linux/ubuntu/jaunty')
+memtest = models.ImageBootConfiguration(name='Memtest 86', description='Thoroughly tests system memory', image='http://static.netboot.me/memtest/memtest')
+db.put(memtest)
+
+menu_root = createCategory('/')
+installers = createCategory('/install/')
+linux_installers = createCategory('/install/linux/')
+ubuntu_install = createCategory('/install/linux/ubuntu/')
+jaunty_install_menu = createCategory('/install/linux/ubuntu/jaunty/')
 jaunty_install_menu.entries = [x.key() for x in [jaunty_install, jaunty_cmdline, jaunty_expert, jaunty_expert_cmdline]]
-karmic_install_menu = models.Category.create('/install/linux/ubuntu/karmic')
+karmic_install_menu = createCategory('/install/linux/ubuntu/karmic/')
 karmic_install_menu.entries = [x.key() for x in [karmic_install, karmic_cmdline, karmic_expert, karmic_expert_cmdline]]
+rescue = createCategory('/rescue/')
+linux_rescue = createCategory('/rescue/linux/')
+ubuntu_rescue = createCategory('/rescue/linux/ubuntu/')
 ubuntu_rescue.entries = [x.key() for x in [jaunty_rescue, karmic_rescue]]
-db.put([menu_root, installers, rescue, linux_installers, linux_rescue, ubuntu_install, ubuntu_rescue, jaunty_install_menu, karmic_install_menu])
+diagnostic_menu = createCategory('/diagnostic/')
+diagnostic_menu.entries = [memtest.key()]
+db.put([menu_root, installers, rescue, linux_installers, linux_rescue, ubuntu_install, ubuntu_rescue, jaunty_install_menu, karmic_install_menu, diagnostic_menu])

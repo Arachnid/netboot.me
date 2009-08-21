@@ -3,13 +3,19 @@ import logging
 import models
 import urlparse
 
+from django import newforms as forms
 from google.appengine.ext import db
+
+class EditCategoryForm(forms.Form):
+  name = forms.CharField()
+  description = forms.CharField(widget=forms.widgets.Textarea())
+
+class CreateCategoryForm(EditCategoryForm):
+  path = forms.CharField()
 
 class CategoryHandler(base.BaseHandler):
   """Serves end-user category pages, and redirects to GpxeHandler for gPXE."""
   def get(self, category_name):
-    if category_name != '/':
-      category_name = category_name[:-1] # Remove the trailing /
     if self.isGpxe():
       self.redirect("/browse%s/menu.gpxe" % (category_name,))
       return
@@ -111,8 +117,6 @@ class MenuHandler(base.BaseHandler):
   def get(self, category_name):
     if not category_name:
       category_name = '/'
-    else:
-      category_name = category_name[:-1]
     category, config = getConfig(category_name)
     if not category:
       self.error(404)
@@ -122,3 +126,66 @@ class MenuHandler(base.BaseHandler):
     template_values['config'] = config
     self.response.headers['Content-Type'] = 'application/octet-stream'
     self.renderTemplate('menu.cfg', template_values)
+
+class CategoryActionHandler(base.BaseHandler):
+  ACTION_FORMS = {
+      'add': CreateCategoryForm,
+      'edit': EditCategoryForm,
+      'delete': lambda x=None: None,
+  }
+  
+  def get(self, category_name, action):
+    category = models.Category.get_by_key_name(category_name)
+    if not category:
+      self.error(404)
+      return
+    self.renderForm(action, category)
+  
+  def post(self, category_name, action):
+    category = models.Category.get_by_key_name(category_name)
+    if not category:
+      self.error(404)
+      return
+    form = self.ACTION_FORMS[action](self.request.POST)
+    if form and not form.is_valid():
+      self.renderForm(action, category, form=None)
+    else:
+      handler = getattr(self, action)
+      handler(category, form)
+  
+  def renderForm(self, action, category, form=None):
+    template = '%s.html' % action
+    if not form:
+      if action == 'edit':
+        args = {
+            'name': category.name,
+            'description': category.description
+        }
+      else:
+        args = None
+      form = self.ACTION_FORMS[action](args)
+    template_values = self.getTemplateValues()
+    template_values['category'] = category
+    template_values['form'] = form
+    self.renderTemplate(template, template_values)
+  
+  def add(self, category, form):
+    path = '%s%s/' % (category.path, form.clean_data['path'])
+    category = models.Category(
+        key_name = path,
+        name = form.clean_data['name'],
+        description = form.clean_data['description'],
+        path = path,
+        depth = path.count('/'))
+    category.put()
+    self.redirect('/browse%s' % (category.path,))
+  
+  def edit(self, category, form):
+    category.name = form.clean_data['name']
+    category.description = form.clean_data['description']
+    category.put()
+    self.redirect('/browse%s' % (category.path,))
+  
+  def delete(self, category, unused_form):
+    category.delete()
+    self.redirect('/browse%s/' % (category.path.rsplit('/', 2)[0]))

@@ -14,6 +14,7 @@ application = webapp.WSGIApplication([
 
   # Category page
   ('/browse(/(?:[a-zA-Z][a-zA-Z0-9]*/)*)', CategoryHandler),
+  ('/browse(/(?:[a-zA-Z][a-zA-Z0-9]*/)*)(add|edit|delete)', CategoryActionHandler),
 
   # Gpxe script (loads category menu)
   ('/browse(/(?:[a-zA-Z][a-zA-Z0-9]*/)*)menu.gpxe|/menu.gpxe', GpxeHandler), 

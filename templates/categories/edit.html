@@ -1,0 +1,13 @@
+{% extends "../base.html" %}
+{% block title %}Editing category "{{category.name}}"{% endblock %}
+{% block body %}
+	<div id="featured" class="clear">
+    <h2>Editing category "{{category.name}}"</h2>
+    <form method="post" action="/browse{{category.path}}edit">
+      <table>
+        {{form.as_table}}
+      </table>
+      <input type="submit" value="Update" />
+    </form>
+	</div>
+{% endblock %}

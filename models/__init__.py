@@ -27,13 +27,6 @@ class Category(db.Model):
   # The number of components in the path
   depth = db.IntegerProperty(required=True)
   entries = db.ListProperty(db.Key, required=True, default=[])
-  
-  @classmethod
-  def create(cls, path, name=None):
-    path_parts = path.split('/')[1:]
-    if not name:
-      name = path_parts[-1]
-    return cls(key_name=path, path=path, name=name, depth=len(path_parts))
 
   @property
   def subcategories(self):
@@ -50,12 +43,12 @@ class Category(db.Model):
   @property
   def path_tuples(self):
     parts = self.path.split("/")
-    return [(x, "/".join(parts[:i+2])) for i, x in enumerate(parts[1:-1])]
+    return [(x, "/".join(parts[:i+2])) for i, x in enumerate(parts[1:-2])]
 
   @property
   def all_path_tuples(self):
     parts = self.path.split("/")
-    return [(x, "/".join(parts[:i+2])) for i, x in enumerate(parts[1:])]
+    return [(x, "/".join(parts[:i+2])) for i, x in enumerate(parts[1:-1])]
 
 class BootConfiguration(polymodel.PolyModel):
   name = db.TextProperty(required=True)
