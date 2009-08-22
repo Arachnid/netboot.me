@@ -141,7 +141,7 @@ class BootGpxeHandler(base.BaseHandler):
     if not config:
       self.error(404)
       return
-    script = [ "#!gpxe" ]
+    script = [ "#!gpxe", "imgfree" ]
     script.extend(config.generateGpxeScript())
     self.response.headers['Content-Type'] = "text/plain"
     self.response.out.write("\n".join(script))

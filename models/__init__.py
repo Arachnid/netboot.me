@@ -90,7 +90,7 @@ class KernelBootConfiguration(BootConfiguration):
   def generateGpxeScript(self):
     return [
         "kernel -n img %s %s" % (self.kernel, self.args),
-        "initrd -n img %s" % (self.initrd,),
+        "initrd %s" % (self.initrd,),
         "boot img",
     ]
 
