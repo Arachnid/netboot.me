@@ -2,6 +2,7 @@ import base
 import models
 
 from django import newforms as forms
+from google.appengine.api import memcache
 from google.appengine.ext import db
 
 class BaseConfigForm(forms.Form):
@@ -163,13 +164,23 @@ class MyConfigsHandler(base.BaseHandler):
     template_values['deprecated'] = [x for x in all_configs if x.deprecated]
     self.renderTemplate("myconfigs.html", template_values)
 
+def recordDownload(config):
+  # Update a record at most every 10 seconds - otherwise memcache it
+  id = config.key().id()
+  lock_key = "config_lock:%d" % id
+  count_key = "config_downloads:%d" % id
+  if memcache.add(lock_key, None, time=10):
+    count = int(memcache.get(count_key) or 0) + 1
+    config.recordDownloads(count)
+    memcache.delete(count_key)
+  else:
+    memcache.incr(count_key, initial_value=0)
+  
 class BootGpxeHandler(base.BaseHandler):
   """Serves up gPXE scripts to boot directly to a given config."""
-  def get(self, id):
-    config = models.BootConfiguration.get_by_id(int(id))
-    if not config:
-      self.error(404)
-      return
+  @hasConfig
+  def get(self, config):
+    recordDownload(config)
     script = [ "#!gpxe", "imgfree" ]
     script.extend(config.generateGpxeScript())
     self.response.headers['Content-Type'] = "text/plain"

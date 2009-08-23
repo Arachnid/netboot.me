@@ -61,6 +61,8 @@ class BootConfiguration(polymodel.PolyModel):
   created = db.DateTimeProperty(required=True, auto_now_add=True)
   owner = db.ReferenceProperty(UserAccount)
   deprecated = db.BooleanProperty(required=True, default=False)
+  downloads_daily = db.ListProperty(int, required=True, default=[0])
+  downloads_7day = db.IntegerProperty(required=True, default=0)
 
   def generateMenuEntry(self):
     return ["kernel /%d/boot.gpxe" % (self.key().id(),)]
@@ -77,6 +79,13 @@ class BootConfiguration(polymodel.PolyModel):
   @property
   def categories(self):
     return Category.all().filter("entries =", self.key())
+
+  @transactionize
+  def recordDownloads(self, count):
+    config = BootConfiguration.get(self.key())
+    config.downloads_daily[-1] += count
+    config.put()
+    return config
 
 def truncateUrl(url):
   parts = url.split("/")
