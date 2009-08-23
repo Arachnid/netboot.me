@@ -61,7 +61,7 @@ class BootConfiguration(polymodel.PolyModel):
   created = db.DateTimeProperty(required=True, auto_now_add=True)
   owner = db.ReferenceProperty(UserAccount)
   deprecated = db.BooleanProperty(required=True, default=False)
-  downloads_daily = db.ListProperty(int, required=True, default=[])
+  downloads_daily = db.ListProperty(int, required=True, default=[0])
   downloads_7day = db.IntegerProperty(required=True, default=0)
   last_rollover = db.DateTimeProperty()
 
