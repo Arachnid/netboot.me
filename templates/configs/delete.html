@@ -1,0 +1,17 @@
+{% extends "../base.html" %}
+{% block title %}Deleting configuration "{{config.name}}"{% endblock %}
+{% block body %}
+	<div id="featured" class="clear">
+    <h2>Deleting configuration "{{config.name}}"</h2>
+    <form method="post" action="/{{config.key.id}}/delete">
+      {% if in_menu %}
+        <p>You can't delete this configuration - it's in the boot menu! Do you
+        want to mark it as deprecated instead?</p>
+        <input type="submit" value="Deprecate" />
+      {% else %}
+        <p>Are you sure you want to delete this configuration?</p>
+        <input type="submit" value="Delete" />
+      {% endif %}
+    </form>
+	</div>
+{% endblock %}

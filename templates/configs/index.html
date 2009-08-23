@@ -3,14 +3,14 @@
 {% block body %}
 	<div id="featured" class="clear">
     {% if user %}
-      {% if user.is_admin %}
+      {% if can_edit %}
+        {% if not categories %}
+          <a class="admin" href="/{{config.key.id}}/delete">Delete</a>
+        {% endif %}
         <a class="admin" href="/{{config.key.id}}/edit">Edit</a>
       {% endif %}
-      {% ifequal user.user config.owner %}
-        <a class="admin" href="/{{config.key.id}}/edit">Edit</a>
-      {% endifequal %}
     {% endif %}
-    {% for category in config.categories %}
+    {% for category in categories %}
       <p>{% for part in category.all_path_tuples %}
         <a href="/browse{{part.1}}/">{{part.0}}</a> /
       {% endfor %}</p>

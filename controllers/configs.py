@@ -59,6 +59,12 @@ class BootConfigHandler(base.BaseHandler):
       return
     template_values = self.getTemplateValues()
     template_values['config'] = config
+    template_values['categories'] = config.categories.fetch(10)
+    if not self.user:
+      template_values['can_edit'] = False
+    else:
+      is_owner = config.owner and self.user.key() == config.owner.key()
+      template_values['can_edit'] = is_owner or self.user.is_admin
     self.renderTemplate("index.html", template_values)
 
 class EditConfigHandler(base.BaseHandler):
@@ -89,6 +95,24 @@ class EditConfigHandler(base.BaseHandler):
     template_values['config'] = config
     template_values['form'] = form
     self.renderTemplate("edit.html", template_values)
+
+class DeleteConfigHandler(base.BaseHandler):
+  @ownsConfig
+  def get(self, config):
+    template_values = self.getTemplateValues()
+    template_values['config'] = config
+    template_values['in_menu'] = config.categories.count(1)
+    self.renderTemplate("delete.html", template_values)
+  
+  @ownsConfig
+  def post(self, config):
+    if config.categories.count(1):
+      # In a category - mark deprecated instead
+      config.deprecated = True
+      config.put()
+    else:
+      config.delete()
+    self.redirect('/my/configs')
 
 class NewConfigHandler(base.BaseHandler):
   """Create new configurations."""

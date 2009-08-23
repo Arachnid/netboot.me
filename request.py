@@ -25,6 +25,7 @@ application = webapp.WSGIApplication([
   # Individual boot entry page
   ('/([0-9]+)', BootConfigHandler),
   ('/([0-9]+)/edit', EditConfigHandler),
+  ('/([0-9]+)/delete', DeleteConfigHandler),
   
   # List of a user's configs
   ('/my/configs', MyConfigsHandler),

@@ -4,6 +4,11 @@ from google.appengine.api import users
 from google.appengine.ext import db
 from google.appengine.ext.db import polymodel
 
+def transactionize(fun):
+  def decorate(*args, **kwargs):
+    return db.run_in_transaction(fun, *args, **kwargs)
+  return decorate
+
 class UserAccount(db.Model):
   user = db.UserProperty(required=True)
   is_admin = db.BooleanProperty(required=True, default=False)
