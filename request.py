@@ -26,6 +26,8 @@ application = webapp.WSGIApplication([
   ('/([0-9]+)', BootConfigHandler),
   ('/([0-9]+)/edit', EditConfigHandler),
   ('/([0-9]+)/delete', DeleteConfigHandler),
+  ('/([0-9]+)/addcategory', AddConfigCategoryHandler),
+  ('/([0-9]+)/deletecategory', DeleteConfigCategoryHandler),
   
   # List of a user's configs
   ('/my/configs', MyConfigsHandler),

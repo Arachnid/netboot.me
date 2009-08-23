@@ -2,6 +2,7 @@ import base
 import models
 
 from django import newforms as forms
+from google.appengine.ext import db
 
 class BaseConfigForm(forms.Form):
   name = forms.CharField(max_length=255)
@@ -60,11 +61,15 @@ class BootConfigHandler(base.BaseHandler):
     template_values = self.getTemplateValues()
     template_values['config'] = config
     template_values['categories'] = config.categories.fetch(10)
+    template_values['is_admin'] = self.user and self.user.is_admin
     if not self.user:
       template_values['can_edit'] = False
     else:
       is_owner = config.owner and self.user.key() == config.owner.key()
       template_values['can_edit'] = is_owner or self.user.is_admin
+    if self.user and self.user.is_admin:
+      template_values['category_list'] = [
+          x.path for x in models.Category.all().order('path').fetch(1000)]
     self.renderTemplate("index.html", template_values)
 
 class EditConfigHandler(base.BaseHandler):
@@ -169,3 +174,24 @@ class BootGpxeHandler(base.BaseHandler):
     script.extend(config.generateGpxeScript())
     self.response.headers['Content-Type'] = "text/plain"
     self.response.out.write("\n".join(script))
+
+class AddConfigCategoryHandler(base.BaseHandler):
+  @hasConfig
+  @base.isAdmin
+  def post(self, config):
+    def add_category():
+      category = models.Category.get_by_key_name(self.request.POST['path'])
+      category.entries.append(config.key())
+      category.put()
+    db.run_in_transaction(add_category)
+    self.redirect('/%d' % (config.key().id(),))
+
+class DeleteConfigCategoryHandler(base.BaseHandler):
+  @hasConfig
+  @base.isAdmin
+  def post(self, config):
+    def remove_category():
+      category = models.Category.get_by_key_name(self.request.POST['path'])
+      category.entries.remove(config.key())
+      category.put()
+    db.run_in_transaction(remove_category)
