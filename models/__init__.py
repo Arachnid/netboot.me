@@ -61,8 +61,9 @@ class BootConfiguration(polymodel.PolyModel):
   created = db.DateTimeProperty(required=True, auto_now_add=True)
   owner = db.ReferenceProperty(UserAccount)
   deprecated = db.BooleanProperty(required=True, default=False)
-  downloads_daily = db.ListProperty(int, required=True, default=[0])
+  downloads_daily = db.ListProperty(int, required=True, default=[])
   downloads_7day = db.IntegerProperty(required=True, default=0)
+  last_rollover = db.DateTimeProperty()
 
   def generateMenuEntry(self):
     return ["kernel /%d/boot.gpxe" % (self.key().id(),)]

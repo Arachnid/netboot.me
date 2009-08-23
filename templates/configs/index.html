@@ -55,8 +55,9 @@
     </h2>
     <p>{{config.description}}</p>
     <table>
-      <tr><th>Created</th><td>{{config.created|date:"Y/m/d"}}</td></tr>
+      <tr><th>Downloads (last 7 days)</th><td>{{config.downloads_7day}}</td></tr>
       <tr><th>Type</th><td>{{config.typeName}}</td></tr>
+      <tr><th>Created</th><td>{{config.created|date:"Y/m/d"}}</td></tr>
       {% for attrib in config.attributes %}
         <tr><th>{{attrib.0}}</th><td>{{attrib.1}}</td></tr>
       {% endfor %}

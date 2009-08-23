@@ -4,3 +4,4 @@ from categories import CategoryHandler, CategoryActionHandler, GpxeHandler, Menu
 from configs import BootConfigHandler, NewConfigHandler, EditConfigHandler
 from configs import BootGpxeHandler, MyConfigsHandler, DeleteConfigHandler
 from configs import AddConfigCategoryHandler, DeleteConfigCategoryHandler
+from update import UpdateHandler
