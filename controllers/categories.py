@@ -178,7 +178,7 @@ class CategoryActionHandler(base.BaseHandler):
         name = form.clean_data['name'],
         description = form.clean_data['description'],
         path = path,
-        depth = path.count('/'))
+        depth = path.count('/') - 1)
     category.put()
     self.redirect('/browse%s' % (category.path,))
   
