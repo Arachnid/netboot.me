@@ -61,7 +61,10 @@ class BootConfiguration(polymodel.PolyModel):
   created = db.DateTimeProperty(required=True, auto_now_add=True)
   owner = db.ReferenceProperty(UserAccount)
   deprecated = db.BooleanProperty(required=True, default=False)
+  # Downloads for each day -6...today
   downloads_daily = db.ListProperty(int, required=True, default=[0])
+  # Downloads for the last 7 days, including today. This should always equal
+  # sum(downloads_daily)
   downloads_7day = db.IntegerProperty(required=True, default=0)
   last_rollover = db.DateTimeProperty()
 
@@ -85,6 +88,7 @@ class BootConfiguration(polymodel.PolyModel):
   def recordDownloads(self, count):
     config = BootConfiguration.get(self.key())
     config.downloads_daily[-1] += count
+    config.downloads_7day += count
     config.put()
     return config
 

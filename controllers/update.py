@@ -13,8 +13,8 @@ def updateCounters(key):
   if (not config.last_rollover or
       datetime.datetime.today() - config.last_rollover 
       >= datetime.timedelta(days=1)):
-    config.downloads_7day = sum(config.downloads_daily)
     config.downloads_daily = config.downloads_daily[-6:] + [0]
+    config.downloads_7day = sum(config.downloads_daily)
     config.last_rollover = datetime.datetime.now()
     config.put()
 
