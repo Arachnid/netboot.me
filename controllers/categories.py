@@ -4,6 +4,7 @@ import models
 import urlparse
 
 from django import newforms as forms
+from google.appengine.api import memcache
 from google.appengine.ext import db
 
 class EditCategoryForm(forms.Form):
@@ -50,10 +51,7 @@ def getCategories(category_name):
   q.filter('path <', category_name + u'\ufffd')
   q.order('path')
   categories = q.fetch(1000)
-  if categories and categories[0].path == category_name:
-    return categories[0], categories
-  else:
-    return None, categories
+  return categories
 
 def getEntries(categories):
   entry_keys = set()
@@ -103,26 +101,32 @@ def generateMenu(categories, entries):
   return stack[0]
 
 def getConfig(category_name):
-  category, categories = getCategories(category_name)
-  if not category:
-    return None, None
+  categories = getCategories(category_name)
+  if not categories:
+    return None
   entries = getEntries(categories)
   menu = generateMenu(categories, entries)
   menu_lines = []
   menu.writeMenu(menu_lines)
-  return category, "\n".join(menu_lines)
+  return "\n".join(menu_lines)
 
 class MenuHandler(base.BaseHandler):
   """Serves up netboot menu files for the category."""
   def get(self, category_name):
     if not category_name:
       category_name = '/'
-    category, config = getConfig(category_name)
-    if not category:
+    config = memcache.get("menu:%s" % (category_name,))
+    if config:
+      logging.info("Serving config for %s from memcache", category_name)
+    else:
+      config = getConfig(category_name)
+      memcache.set("menu:%s" % (category_name,), config, time=300)
+      logging.info("Regenerating config for %s", category_name)
+    if not config:
       self.error(404)
       return
     template_values = self.getTemplateValues()
-    template_values['category'] = category
+    template_values['name'] = category_name
     template_values['config'] = config
     self.response.headers['Content-Type'] = 'application/octet-stream'
     self.renderTemplate('menu.cfg', template_values)
