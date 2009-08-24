@@ -171,7 +171,7 @@ def recordDownload(config):
   count_key = "config_downloads:%d" % id
   if memcache.add(lock_key, None, time=10):
     count = int(memcache.get(count_key) or 0) + 1
-    config.recordDownloads(count)
+    models.BootConfiguration.recordDownloads(config.key(), count)
     memcache.delete(count_key)
   else:
     memcache.incr(count_key, initial_value=0)

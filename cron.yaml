@@ -1,4 +1,4 @@
 cron:
 - description: Daily config update
   url: /tasks/dailyupdate
-  schedule: every day 00:00
+  schedule: every 6 hours

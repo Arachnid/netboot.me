@@ -1,4 +1,7 @@
 import config
+import datetime
+import logging
+import math
 
 from google.appengine.api import users
 from google.appengine.ext import db
@@ -55,18 +58,21 @@ class Category(db.Model):
     parts = self.path.split("/")
     return [(x, "/".join(parts[:i+2])) for i, x in enumerate(parts[1:-1])]
 
+def timedelta_to_seconds(delta):
+  return delta.days * 86400 + delta.seconds + delta.microseconds / 1000000.0
+
+MEAN_DOWNLOAD_LIFETIME = timedelta_to_seconds(datetime.timedelta(days=7))
+
 class BootConfiguration(polymodel.PolyModel):
   name = db.TextProperty(required=True)
   description = db.TextProperty()
   created = db.DateTimeProperty(required=True, auto_now_add=True)
   owner = db.ReferenceProperty(UserAccount)
   deprecated = db.BooleanProperty(required=True, default=False)
-  # Downloads for each day -6...today
-  downloads_daily = db.ListProperty(int, required=True, default=[0])
-  # Downloads for the last 7 days, including today. This should always equal
-  # sum(downloads_daily)
-  downloads_7day = db.IntegerProperty(required=True, default=0)
-  last_rollover = db.DateTimeProperty()
+  # 7-day downloads using an exponential decay scheme
+  downloads = db.FloatProperty(required=True, default=0.0)
+  # Last time downloads was 'decayed'
+  last_decay = db.DateTimeProperty(required=True, auto_now_add=True)
 
   def generateMenuEntry(self):
     return ["kernel /%d/boot.gpxe" % (self.key().id(),)]
@@ -84,11 +90,18 @@ class BootConfiguration(polymodel.PolyModel):
   def categories(self):
     return Category.all().filter("entries =", self.key())
 
+  @classmethod
   @transactionize
-  def recordDownloads(self, count):
-    config = BootConfiguration.get(self.key())
-    config.downloads_daily[-1] += count
-    config.downloads_7day += count
+  def recordDownloads(cls, key, count):
+    config = BootConfiguration.get(key)
+    
+    now = datetime.datetime.now()
+    decay_time = now - config.last_decay
+    decay_fraction = timedelta_to_seconds(decay_time) / MEAN_DOWNLOAD_LIFETIME
+    
+    config.downloads = config.downloads * (math.e ** -decay_fraction) + count
+    logging.warn(config.downloads)
+    config.last_decay = now
     config.put()
     return config
 

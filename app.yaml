@@ -18,5 +18,9 @@ handlers:
 - url: /images
   static_dir: static/images
 
+- url: /tasks/.*
+  script: request.py
+  login: admin
+
 - url: /.*
   script: request.py
