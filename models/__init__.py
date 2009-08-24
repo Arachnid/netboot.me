@@ -2,6 +2,7 @@ import config
 import datetime
 import logging
 import math
+import urlparse
 
 from google.appengine.api import users
 from google.appengine.ext import db
@@ -86,6 +87,9 @@ class BootConfiguration(polymodel.PolyModel):
   def attributes(self):
     raise NotImplementedError()
 
+  def get_sources(self):
+    raise NotImplementedError()
+
   @property
   def categories(self):
     return Category.all().filter("entries =", self.key())
@@ -136,6 +140,12 @@ class KernelBootConfiguration(BootConfiguration):
         ("Kernel arguments", self.args),
     ]
 
+  def get_sources(self):
+    domains = set([
+        urlparse.urlparse(self.kernel).netloc,
+        urlparse.urlparse(self.initrd).netloc])
+    return ', '.join(domains)
+
 class ImageBootConfiguration(BootConfiguration):
   image = db.LinkProperty(required=True)
   
@@ -150,6 +160,9 @@ class ImageBootConfiguration(BootConfiguration):
   
   def attributes(self):
     return [("Image URL", formatUrlLink(self.image))]
+
+  def get_sources(self):
+    return urlparse.urlparse(self.image).netloc
 
 class MemdiskBootConfiguration(BootConfiguration):
   image = db.LinkProperty(required=True)
@@ -166,3 +179,6 @@ class MemdiskBootConfiguration(BootConfiguration):
   
   def attributes(self):
     return [("Memdisk location", formatUrlLink(self.image))]
+
+  def get_sources(self):
+    return urlparse.urlparse(self.image).netloc

@@ -85,6 +85,9 @@ class MenuEntry(object):
       if not self.subcategories and i == 0:
         makeLine(menu, depth + 1, "menu default")
       makeLine(menu, depth + 1, "menu label %s", entry.name)
+      makeLine(menu, depth + 1, "text help")
+      menu.append("(%s) %s" % (entry.get_sources(), entry.description))
+      makeLine(menu, depth + 1, "endtext")
       menu.extend(("  "*(depth+1)) + x for x in entry.generateMenuEntry())
     if menupath:
       makeLine(menu, depth - 1, "menu end")
