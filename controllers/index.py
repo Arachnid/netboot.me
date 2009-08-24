@@ -3,7 +3,7 @@ import base
 class IndexHandler(base.BaseHandler):
   def get(self):
     if self.isGpxe():
-      self.redirect('gpxe')
+      self.redirect('/menu.gpxe')
       return
     self.renderTemplate('index.html', self.getTemplateValues())
 
