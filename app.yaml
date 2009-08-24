@@ -12,6 +12,10 @@ handlers:
   static_files: static/\2
   upload: static/(menu.c32|vesamenu.c32)
 
+- url: /googleaf282d669d99b844.html
+  static_files: static/googleaf282d669d99b844.html
+  upload: static/googleaf282d669d99b844.html
+
 - url: /css
   static_dir: static/css
 
