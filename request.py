@@ -36,7 +36,7 @@ application = webapp.WSGIApplication([
   # Individual boot gpxe script
   ('/([0-9]+)/boot.gpxe', BootGpxeHandler),
   
-  ('/tasks/dailyupdate', UpdateHandler),
+  ('/tasks/download_count_update', UpdateHandler),
 ], debug=config.on_dev_server)
 
 def main():
