@@ -19,7 +19,7 @@
     
     <h3>Booting from CD</h3>
     <div>
-    <p>Download and save <a href="http://static.netboot.me/gpxe/netbootme.iso">netbootme.iso</a>,
+    <p>Download and save <a href="http://static.netboot.me/gpxe/netbootme.iso" onclick="javascript:pageTracker._trackPageview('/static/gpxe/netbootme.iso');">netbootme.iso</a>,
     then burn it to CD using your usual CD burning program. In linux, you can use
     cdrecord, OSX users can use the built-in Disk Utility, and windows users can
     use tools such as Nero Burning Rom.</p>
@@ -30,7 +30,7 @@
     <h3>Booting from USB</h3>
     <div>
     <p>You can also boot from USB. To do so, download and save
-    <a href="http://static.netboot.me/gpxe/netbootme.usb">netbootme.usb</a>,
+    <a href="http://static.netboot.me/gpxe/netbootme.usb"  onclick="javascript:pageTracker._trackPageview('/static/gpxe/netbootme.usb');">netbootme.usb</a>,
     then follow the OS specific instructions below.</p>
     
     <h4>Writing a USB image in Linux</h4>
@@ -62,7 +62,7 @@ dd if=netbootme.usb of=/dev/disk3</code>
     <h3>Booting from floppy disk</h3>
     <div>
     <p>If you have a computer that still has a floppy drive, it's possible to
-    boot from that, too. Download and save <a href="http://static.netboot.me/gpxe/netbootme.dsk">netbootme.dsk</a>,
+    boot from that, too. Download and save <a href="http://static.netboot.me/gpxe/netbootme.dsk"  onclick="javascript:pageTracker._trackPageview('/static/gpxe/netbootme.dsk');">netbootme.dsk</a>,
     then follow the same steps as described above for writing the USB disk image.</p>
     </div>
     
@@ -111,7 +111,7 @@ dd if=netbootme.usb of=/dev/disk3</code>
     can host your own copy of the bootstrap image, however, which will allow you
     to use netboot.me without boot disks.</p>
     <p>If you're using dnsmasq, doing this is really easy. Download
-    <a href="http://static.netboot.me/gpxe/netbootme.kpxe">netbootme.kxpe</a>
+    <a href="http://static.netboot.me/gpxe/netbootme.kpxe" onclick="javascript:pageTracker._trackPageview('/static/gpxe/netbootme.kpxe');">netbootme.kxpe</a>
     and save it to the machine running dnsmasq, under /var/lib/tftp. Then, add
     the following lines to /etc/dnsmasq.conf:
     <code>enable-tftp<br />tftp-root=/etc/dnsmasq.conf<br />dhcp-boot=netbootme.kpxe</code></p>

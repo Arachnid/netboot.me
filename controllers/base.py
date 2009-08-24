@@ -1,4 +1,5 @@
 import cgi
+import config
 import logging
 import models
 import os
@@ -47,7 +48,8 @@ class BaseHandler(webapp.RequestHandler):
         'user': self.user,
         'auth_url': (users.create_login_url(self.request.url) if not self.user
                      else users.create_logout_url(self.request.url)),
-        'path': self.request.path
+        'path': self.request.path,
+        'analytics_key': config.analytics_key,
     }
   
   def error(self, code, detail=None):
