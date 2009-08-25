@@ -12,6 +12,14 @@ class BaseConfigForm(forms.Form):
 class EditConfigForm(BaseConfigForm):
   deprecated = forms.BooleanField(required=False)
 
+class FullEditConfigForm(EditConfigForm):
+  kernel = forms.URLField(widget=forms.widgets.TextInput(attrs={'id':"kernel"}),
+                          label="Kernel/Image")
+  initrd = forms.URLField(widget=forms.widgets.TextInput(attrs={'id':"initrd"}),
+                          required=False)
+  args = forms.CharField(widget=forms.widgets.TextInput(attrs={'id':"args"}),
+                         required=False)
+
 class CreateConfigForm(BaseConfigForm):
   type = forms.ChoiceField(
       widget=forms.widgets.Select(attrs={'id':"imagetype"}),
@@ -77,27 +85,51 @@ class EditConfigHandler(base.BaseHandler):
   """Allows editing of a configuration."""
   @ownsConfig
   def get(self, config):
-    form = EditConfigForm({
+    form_vals = {
         'name': config.name,
         'description': config.description,
         'deprecated': config.deprecated,
-    })
-    self.renderForm(config, form)
+    }
+    if isinstance(config, models.KernelBootConfiguration):
+      form_vals['kernel'] = config.kernel
+      form_vals['initrd'] = config.initrd
+      form_vals['args'] = config.args
+    else:
+      form_vals['kernel'] = config.image
+    has_categories = models.Category.all().filter('entries =', config).count(1)
+    if has_categories:
+      form = EditConfigForm(form_vals)
+    else:
+      form = FullEditConfigForm(form_vals)
+    self.renderForm(config, form, {'has_categories': has_categories})
 
   @ownsConfig
   def post(self, config):
-    form = EditConfigForm(self.request.POST)
+    has_categories = models.Category.all().filter('entries =', config).count(1)
+    if has_categories:
+      form = EditConfigForm(self.request.POST)
+    else:
+      form = FullEditConfigForm(self.request.POST)
     if form.is_valid():
       config.name = form.clean_data['name']
       config.description = form.clean_data['description']
       config.deprecated = bool(form.clean_data['deprecated'])
+      if not has_categories:
+        if isinstance(config, models.KernelBootConfiguration):
+          config.kernel = form.clean_data['kernel']
+          config.initrd = form.clean_data['initrd']
+          config.args = form.clean_data['args']
+        else:
+          config.image = form.clean_data['kernel']
       config.put()
       self.redirect("/%d" % (config.key().id(),))
     else:
-      self.renderForm(config, form)
+      self.renderForm(config, form, {'has_categories': has_categories})
   
-  def renderForm(self, config, form):
+  def renderForm(self, config, form, vals=None):
     template_values = self.getTemplateValues()
+    if vals:
+      template_values.update(vals)
     template_values['config'] = config
     template_values['form'] = form
     self.renderTemplate("edit.html", template_values)

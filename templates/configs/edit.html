@@ -7,6 +7,10 @@
       <table>
         {{form.as_table}}
       </table>
+      {% if has_categories %}
+        <p>Once a config has been added to the boot menu, you cannot edit the
+        URLs or boot arguments. Create a new configuration in order to do so.</p>
+      {% endif %}
       <input type="submit" value="Update" />
     </form>
 	</div>
