@@ -10,7 +10,7 @@
         <thead><tr><th>Name</th><th>Type</th><th>Created</th></tr></thead>
         {% for config in configs %}
           <tr>
-            <th><a href="/{{config.key.id}}">{{config.name}}</a></th>
+            <th><a href="/{{config.key.id}}">{{config.name|escape}}</a></th>
             <td>{{config.typeName}}</td>
             <td>{{config.created|date:"Y/m/d"}}</td>
           </tr>
@@ -24,7 +24,7 @@
         <thead><tr><th>Name</th><th>Type</th><th>Created</th></tr></thead>
         {% for config in deprecated %}
           <tr>
-            <th><a href="/{{config.key.id}}">{{config.name}}</a></th>
+            <th><a href="/{{config.key.id}}">{{config.name|escape}}</a></th>
             <td>{{config.typeName}}</td>
             <td>{{config.created|date:"Y/m/d"}}</td>
           </tr>

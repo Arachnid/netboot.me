@@ -50,16 +50,16 @@
       </form>
     {% endif %}
     <h2>
-      {{config.name}}
+      {{config.name|escape}}
       {% if config.deprecated %}(deprecated){% endif %}
     </h2>
-    <p>{{config.description}}</p>
+    <p>{{config.description|escape}}</p>
     <table>
       <tr><th>Downloads (last 7 days)</th><td>{{config.downloads|floatformat:0}}</td></tr>
       <tr><th>Type</th><td>{{config.typeName}}</td></tr>
       <tr><th>Created</th><td>{{config.created|date:"Y/m/d"}}</td></tr>
       {% for attrib in config.attributes %}
-        <tr><th>{{attrib.0}}</th><td>{{attrib.1}}</td></tr>
+        <tr><th>{{attrib.0}}</th><td>{{attrib.1|escape}}</td></tr>
       {% endfor %}
       <tr>
         <th>Chainload URL <a href="/help#chainload" title="What's this?">(?)</a></th>

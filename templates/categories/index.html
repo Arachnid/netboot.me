@@ -39,7 +39,7 @@
           <li>
             <a href="/{{entry.key.id}}">{{entry.name|escape}}</a>
             {% if entry.description %}
-              <p>{{entry.description|truncatewords:20}}</p>
+              <p>{{entry.description|truncatewords:20|escape}}</p>
             {% endif %}
           </li>
         {% endfor %}

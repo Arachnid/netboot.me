@@ -1,8 +1,8 @@
 {% extends "../base.html" %}
-{% block title %}Deleting configuration "{{config.name}}"{% endblock %}
+{% block title %}Deleting configuration "{{config.name|escape}}"{% endblock %}
 {% block body %}
 	<div id="featured" class="clear">
-    <h2>Deleting configuration "{{config.name}}"</h2>
+    <h2>Deleting configuration "{{config.name|escape}}"</h2>
     <form method="post" action="/{{config.key.id}}/delete">
       {% if in_menu %}
         <p>You can't delete this configuration - it's in the boot menu! Do you

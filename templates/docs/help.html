@@ -8,10 +8,11 @@
       <li><a href="#whatis">What is netboot.me?</a></li>
       <li><a href="#why">Why would I use netboot.me?</a></li>
       <li><a href="#download">Where can I get the bootloaders?</a></li>
-      <li><a href="#oss">Is netboot.me Open Source Software?</a></li>
+      <li><a href="#create">Can I create my own configurations?</a></li>
       <li><a href="#chainload">What are all these 'chainload URLs'?</a></li>
       <li><a href="#bugs">How can I report bugs and feature requests?</a></li>
-      <li><a href="#submit">How can I suggest a new configuration for the menu?</a></li>
+      <li><a href="#group">Is there a discussion group or forum?</a></li>
+      <li><a href="#oss">Is netboot.me Open Source Software?</a></li>
     </ul>
     
     <a name="whatis"><h3>What is netboot.me?</h3></a>
@@ -77,15 +78,15 @@
     </table>
     <p>Installation instructions for all these images can be found <a href="/gettingstarted">here</a>.</p>
     
-    <a name="#oss"><h3>Is netboot.me Open Source Software?</h3></a>
-    <p>Yes! netboot.me is licensed under the BSD license. You can find the source
-    for the site <a href="http://github.com/arachnid/netboot.me/">here</a>,
-    and the source for the modified version of the gPXE bootloader used by netboot.me
-    <a href="http://github.com/arachnid/netboot.me-gpxe">here</a>. Contributions
-    are welcomed. If you'd like to create your own netboot.me clone, you're
-    welcome to, but please credit the original!</p>
+    <a name="create"><h3>Can I create my own configurations?</h3></a>
+    <p>Log in by clicking on the log in link in the header (a Google account
+    is required), then <a href="/my/newconfig">create a config</a> from your
+    "My Configs" page. Once you've created it, follow the directions below to
+    boot it and try it out. If you think it will be of general interest,
+    <a href="http://github.com/Arachnid/netboot.me/issues">file a bug</a> for it
+    to be included in the menu.</p>
     
-    <a name="#chainload"><h3>What are all these 'chainload URLs'?</h3></a>
+    <a name="chainload"><h3>What are all these 'chainload URLs'?</h3></a>
     <p>When you know exactly what you want to boot, it can be convenient to
     bypass some or all of the menu system. The chainload URLs exist to facilitate
     that. To boot directly into a configuration, start up your computer as you
@@ -96,16 +97,21 @@
     into Memtest 86, you would type the following at the gPXE command prompt:
     <code>gPXE> autoboot<br />gPXE> chain http://netboot.me/3005</code>.</p>
     
-    <a name="#bugs"><h3>How can I report bugs and feature requests?</h3></a>
+    <a name="bugs"><h3>How can I report bugs and feature requests?</h3></a>
     <p>You can submit bugs and feature requests
     <a href="http://github.com/Arachnid/netboot.me/issues">here</a>. Please
     search before you submit - voting for an existing issue counts for more than
     creating a new one!</p>
     
-    <a name="#submit"><h3>How can I suggest a new configuration for the menu?</h3></a>
-    <p>You can create a new config from your 'My Configs' page, or by clicking
-    <a href="/my/newconfig">here</a>. Once you have created a config and tested
-    it, <a href="http://github.com/Arachnid/netboot.me/issues">file a feature
-    request</a> to have it added to the menu.</p>
+    <a name="group"><h3>Is there a discussion group or forum?</h3></a>
+    <p>A general discussion group is <a href="http://groups.google.com/group/netbootme-discuss">here</a>.</p>
+    
+    <a name="oss"><h3>Is netboot.me Open Source Software?</h3></a>
+    <p>Yes! netboot.me is licensed under the BSD license. You can find the source
+    for the site <a href="http://github.com/arachnid/netboot.me/">here</a>,
+    and the source for the modified version of the gPXE bootloader used by netboot.me
+    <a href="http://github.com/arachnid/netboot.me-gpxe">here</a>. Contributions
+    are welcomed. If you'd like to create your own netboot.me clone, you're
+    welcome to, but please credit the original!</p>
 	</div>
 {% endblock %}
