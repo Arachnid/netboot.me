@@ -7,7 +7,7 @@
       <table>
         {{form.as_table}}
       </table>
-      {% if has_categories %}
+      {% if not edit_all %}
         <p>Once a config has been added to the boot menu, you cannot edit the
         URLs or boot arguments. Create a new configuration in order to do so.</p>
       {% endif %}

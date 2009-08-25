@@ -54,7 +54,7 @@ def ownsConfig(fun):
   @base.loggedIn
   @hasConfig
   def decorate(self, config, *args, **kwargs):
-    if self.user.is_admin or (config.user and config.user.key() != self.user.key()):
+    if self.user.is_admin or (config.owner and config.owner.key() != self.user.key()):
       fun(self, config, *args, **kwargs)
     else:
       self.error(401)
@@ -96,25 +96,27 @@ class EditConfigHandler(base.BaseHandler):
       form_vals['args'] = config.args
     else:
       form_vals['kernel'] = config.image
-    has_categories = models.Category.all().filter('entries =', config).count(1)
-    if has_categories:
-      form = EditConfigForm(form_vals)
-    else:
+    edit_all = ((self.user and self.user.is_admin) or
+                not models.Category.all().filter('entries =', config).count(1))
+    if edit_all:
       form = FullEditConfigForm(form_vals)
-    self.renderForm(config, form, {'has_categories': has_categories})
+    else:
+      form = EditConfigForm(form_vals)
+    self.renderForm(config, form, {'edit_all': edit_all})
 
   @ownsConfig
   def post(self, config):
-    has_categories = models.Category.all().filter('entries =', config).count(1)
-    if has_categories:
-      form = EditConfigForm(self.request.POST)
-    else:
+    edit_all = ((self.user and self.user.is_admin) or
+                not models.Category.all().filter('entries =', config).count(1))
+    if edit_all:
       form = FullEditConfigForm(self.request.POST)
+    else:
+      form = EditConfigForm(self.request.POST)
     if form.is_valid():
       config.name = form.clean_data['name']
       config.description = form.clean_data['description']
       config.deprecated = bool(form.clean_data['deprecated'])
-      if not has_categories:
+      if edit_all:
         if isinstance(config, models.KernelBootConfiguration):
           config.kernel = form.clean_data['kernel']
           config.initrd = form.clean_data['initrd']
@@ -124,7 +126,7 @@ class EditConfigHandler(base.BaseHandler):
       config.put()
       self.redirect("/%d" % (config.key().id(),))
     else:
-      self.renderForm(config, form, {'has_categories': has_categories})
+      self.renderForm(config, form, {'edit_all': edit_all})
   
   def renderForm(self, config, form, vals=None):
     template_values = self.getTemplateValues()
