@@ -59,7 +59,7 @@
       <tr><th>Type</th><td>{{config.typeName}}</td></tr>
       <tr><th>Created</th><td>{{config.created|date:"Y/m/d"}}</td></tr>
       {% for attrib in config.attributes %}
-        <tr><th>{{attrib.0}}</th><td>{{attrib.1|escape}}</td></tr>
+        <tr><th>{{attrib.0}}</th><td>{{attrib.1}}</td></tr>
       {% endfor %}
       <tr>
         <th>Chainload URL <a href="/help#chainload" title="What's this?">(?)</a></th>
