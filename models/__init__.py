@@ -120,15 +120,15 @@ def formatUrlLink(url):
 
 class KernelBootConfiguration(BootConfiguration):
   kernel = db.LinkProperty(required=True)
-  initrd = db.LinkProperty()
+  initrd = db.StringProperty()
   args = db.StringProperty()
 
   def generateGpxeScript(self):
-    return [
-        "kernel -n img %s %s" % (self.kernel, self.args),
-        "initrd %s" % (self.initrd,),
-        "boot img",
-    ]
+    ret = ["kernel -n img %s %s" % (self.kernel, self.args)]
+    if self.initrd:
+      ret.append("initrd %s" % (self.initrd,))
+    ret.append("boot img")
+    return ret
 
   def typeName(self):
     return "Linux Kernel"
