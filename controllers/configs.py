@@ -54,7 +54,7 @@ def ownsConfig(fun):
   @base.loggedIn
   @hasConfig
   def decorate(self, config, *args, **kwargs):
-    if self.user.is_admin or (config.owner and config.owner.key() != self.user.key()):
+    if self.user.is_admin or (config.owner and config.owner.key() == self.user.key()):
       fun(self, config, *args, **kwargs)
     else:
       self.error(401)
