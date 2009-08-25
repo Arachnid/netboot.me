@@ -227,7 +227,7 @@ input.button {
 	top: 12px; right: 30px;
 	width: 292px;
 	height: 234px;	
-/*	background: url(../images/header-bg.png) no-repeat; */
+	background: url(../images/logo.png) no-repeat;
 }
 
 /*  navigation  */
