@@ -188,7 +188,7 @@ class ISOBootConfiguration(BootConfiguration):
   
   def generateGpxeScript(self):
     return [
-      "kernel -n img %s iso" % (config.memdisk_url,),
+      "kernel -n img %s iso" % (config.memdisk_iso_url,),
       "initrd -n img %s" % (self.image,),
       "boot img"
     ]
