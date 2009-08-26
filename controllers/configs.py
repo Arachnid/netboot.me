@@ -26,7 +26,8 @@ class CreateConfigForm(BaseConfigForm):
       choices=(
         ("kernel", "Linux Kernel"),
         ("image", "Raw image file"),
-        ("memdisk", "Disk image")),
+        ("memdisk", "Disk image"),
+        ("iso", "CD ISO Image")),
       initial="kernel")
   kernel = forms.URLField(widget=forms.widgets.TextInput(attrs={'id':"kernel"}),
                           label="Kernel/Image")
@@ -39,6 +40,7 @@ config_model_map = {
     "kernel": models.KernelBootConfiguration,
     "image": models.ImageBootConfiguration,
     "memdisk": models.MemdiskBootConfiguration,
+    "iso": models.ISOBootConfiguration,
 }
 
 def hasConfig(fun):
@@ -173,7 +175,7 @@ class NewConfigHandler(base.BaseHandler):
         args['kernel'] = form.clean_data['kernel']
         args['initrd'] = form.clean_data['initrd']
         args['args'] = form.clean_data['args']
-      elif form.clean_data['type'] in ("image", "memdisk"):
+      elif form.clean_data['type'] in ("image", "memdisk", "iso"):
         args['image'] = form.clean_data['kernel']
       config = config_model_map[form.clean_data['type']](**args)
       config.put()

@@ -182,3 +182,22 @@ class MemdiskBootConfiguration(BootConfiguration):
 
   def get_sources(self):
     return urlparse.urlparse(self.image).netloc
+
+class ISOBootConfiguration(BootConfiguration):
+  image = db.LinkProperty(required=True)
+  
+  def generateGpxeScript(self):
+    return [
+      "kernel -n img %s iso" % (config.memdisk_url,),
+      "initrd -n img %s" % (self.image,),
+      "boot img"
+    ]
+
+  def typeName(self):
+    return "CD ISO image"
+  
+  def attributes(self):
+    return [("ISO location", formatUrlLink(self.image))]
+
+  def get_sources(self):
+    return urlparse.urlparse(self.image).netloc
