@@ -163,6 +163,12 @@ input:focus, select:focus, textarea:focus {
 	color: #7BA857;
 	background: #EFFAE6;
 }
+input[type=text], textarea {
+  width: 30em;
+}
+textarea {
+  height: 10em;
+}
 #name, #email, #message, #website {
 	width: 380px;
 }
