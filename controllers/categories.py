@@ -7,6 +7,19 @@ from django import newforms as forms
 from google.appengine.api import memcache
 from google.appengine.ext import db
 
+def word_wrap(s, width=80):
+  paragraphs = s.split('\n')
+  lines = []
+  for paragraph in paragraphs:
+    while len(paragraph) > width:
+      pos = paragraph.rfind(' ', 0, width)
+      if not pos:
+        pos = width
+      lines.append(paragraph[:pos])
+      paragraph = paragraph[pos:]
+    lines.append(paragraph)
+  return '\n'.join(lines)
+
 class EditCategoryForm(forms.Form):
   name = forms.CharField()
   description = forms.CharField(required=False, widget=forms.widgets.Textarea())
@@ -86,7 +99,8 @@ class MenuEntry(object):
         makeLine(menu, depth + 1, "menu default")
       makeLine(menu, depth + 1, "menu label %s", entry.name)
       makeLine(menu, depth + 1, "text help")
-      menu.append("(%s) %s" % (entry.get_sources(), entry.description))
+      menu.append(word_wrap("(%s) %s" % (entry.get_sources(),
+                                         entry.description)))
       makeLine(menu, depth + 1, "endtext")
       menu.extend(("  "*(depth+1)) + x for x in entry.generateMenuEntry())
     if menupath:
