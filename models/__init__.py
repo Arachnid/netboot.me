@@ -131,7 +131,7 @@ class KernelBootConfiguration(BootConfiguration):
     return ret
 
   def typeName(self):
-    return "Linux Kernel"
+    return "OS Kernel"
   
   def attributes(self):
     return [
