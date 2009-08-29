@@ -17,10 +17,10 @@ application = webapp.WSGIApplication([
   ('/browse(/(?:[a-zA-Z][a-zA-Z0-9]*/)*)(add|edit|delete)', CategoryActionHandler),
 
   # Gpxe script (loads category menu)
-  ('/browse(/(?:[a-zA-Z][a-zA-Z0-9]*/)*)menu.gpxe|/menu.gpxe', GpxeHandler), 
+  ('/menu.gpxe', GpxeHandler), 
 
   # Category menu definition
-  ('/browse(/(?:[a-zA-Z][a-zA-Z0-9]*/)*)menu.cfg|/menu.cfg', MenuHandler),
+  ('/menu.cfg', MenuHandler),
 
   # Individual boot entry page
   ('/([0-9]+)', BootConfigHandler),

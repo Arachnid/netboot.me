@@ -3,6 +3,7 @@ import config
 import logging
 import models
 import os
+import re
 import sys
 import traceback
 import urlparse
@@ -27,6 +28,17 @@ def isAdmin(fun):
     else:
       fun(self, *args, **kwargs)
   return decorate
+
+ua_re = re.compile('^gPXE/(\d+).(\d+).(\d+)(\S*)'
+                   '(?: \(netboot.me/(\d+).(\d+)(?:.(\d+))?\))?$')
+def parseUserAgent(ua):
+  match = ua_re.match(ua)
+  if not match:
+    return (None, None, None, None), (None, None, None)
+  else:
+    groups = match.groups()
+    return ((int(groups[0]), int(groups[1]), int(groups[2]), groups[3]),
+            (int(groups[4]), int(groups[5]), groups[6] and int(groups[6])))
 
 class BaseHandler(webapp.RequestHandler):
   def initialize(self, request, response):
@@ -65,3 +77,6 @@ class BaseHandler(webapp.RequestHandler):
 
   def isGpxe(self):
     return self.request.headers.get('User-Agent', '').startswith('gPXE')
+
+  def getGpxeVersions(self):
+    return parseUserAgent(self.request.headers.get('User-Agent', ''))
