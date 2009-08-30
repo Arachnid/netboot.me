@@ -114,7 +114,7 @@ dd if=netbootme.usb of=/dev/disk3</code>
     <a href="http://static.netboot.me/gpxe/netbootme.kpxe" onclick="javascript:pageTracker._trackPageview('/static/gpxe/netbootme.kpxe');">netbootme.kxpe</a>
     and save it to the machine running dnsmasq, under /var/lib/tftp. Then, add
     the following lines to /etc/dnsmasq.conf:
-    <code>enable-tftp<br />tftp-root=/etc/dnsmasq.conf<br />dhcp-boot=netbootme.kpxe</code></p>
+    <code>enable-tftp<br />tftp-root=/var/lib/tftp<br />dhcp-boot=netbootme.kpxe</code></p>
     <p>If you're using DHCPd, you'll need to set up your own TFTP server -
     tftpd-hal is a good choice. Once you've set it up, add the location of your
     TFTP server to the DHCPd configuration file, as shown above.</p>
