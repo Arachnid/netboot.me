@@ -36,9 +36,8 @@ def parseUserAgent(ua):
   if not match:
     return (None, None, None, None), (None, None, None)
   else:
-    groups = match.groups()
-    return ((int(groups[0]), int(groups[1]), int(groups[2]), groups[3]),
-            (int(groups[4]), int(groups[5]), groups[6] and int(groups[6])))
+    groups = [int(x) if x and x.isdigit() else x for x in match.groups()]
+    return groups[:4], groups[4:]
 
 class BaseHandler(webapp.RequestHandler):
   def initialize(self, request, response):
