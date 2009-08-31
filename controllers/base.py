@@ -37,7 +37,7 @@ def parseUserAgent(ua):
     return (None, None, None, None), (None, None, None)
   else:
     groups = [int(x) if x and x.isdigit() else x for x in match.groups()]
-    return groups[:4], groups[4:]
+    return tuple(groups[:4]), tuple(groups[4:])
 
 class BaseHandler(webapp.RequestHandler):
   def initialize(self, request, response):
