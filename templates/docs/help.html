@@ -9,7 +9,8 @@
       <li><a href="#why">Why would I use netboot.me?</a></li>
       <li><a href="#download">Where can I get the bootloaders?</a></li>
       <li><a href="#create">Can I create my own configurations?</a></li>
-      <li><a href="#chainload">What are all these 'chainload URLs'?</a></li>
+      <li><a href="#chainload">How can I boot a configuration that's not on the menu?</a></li>
+      <li><a href="#vesa">The default menu doesn't work for me</a></li>
       <li><a href="#bugs">How can I report bugs and feature requests?</a></li>
       <li><a href="#group">Is there a discussion group or forum?</a></li>
       <li><a href="#oss">Is netboot.me Open Source Software?</a></li>
@@ -86,16 +87,20 @@
     <a href="http://github.com/Arachnid/netboot.me/issues">file a bug</a> for it
     to be included in the menu.</p>
     
-    <a name="chainload"><h3>What are all these 'chainload URLs'?</h3></a>
+    <a name="chainload"><h3>How can I boot a configuration that's not on the menu?</h3></a>
     <p>When you know exactly what you want to boot, it can be convenient to
-    bypass some or all of the menu system. The chainload URLs exist to facilitate
-    that. To boot directly into a configuration, start up your computer as you
-    would normally when booting netboot.me, and press Ctrl+B when prompted.
-    Then, type "autoboot" to detect and initialize your network interfaces. When
-    that returns, type "chain &lt;url>". Where &lt;url> is the chainload URL
-    displayed on the relevant configuration page. For example, to boot directly
-    into Memtest 86, you would type the following at the gPXE command prompt:
-    <code>gPXE> autoboot<br />gPXE> chain http://netboot.me/3005</code>.</p>
+    bypass some or all of the menu system. To boot directly into a configuration,
+    start up your computer as you would normally when booting netboot.me, and 
+    press any key when the message "Press any key for options or wait n seconds"
+    is displayed. Then, select the option titled "Boot a configuration directly",
+    and enter the ID of your configuration (the last part of the URL) and press
+    enter to boot it. For example, to boot directly into Memtest 86, you would 
+    enter the number '3005'.</p>
+    
+    <a name="vesa"><h3>The default menu doesn't work for me</h3></a>
+    <p>Some systems have trouble with the default (graphical) menu. If your system
+    is one of those, simply press any key when prompted to "Press any key for options
+    or wait n seconds", and select the text menu option from the resulting display.</p>
     
     <a name="bugs"><h3>How can I report bugs and feature requests?</h3></a>
     <p>You can submit bugs and feature requests
