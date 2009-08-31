@@ -1,4 +1,4 @@
 #!gpxe
-input id "Enter configuration ID to boot (eg, 2008)"
+input id "Enter configuration ID to boot (eg, 3005)"
 imgfree
 chain http://www.netboot.me/${id}/boot.gpxe
