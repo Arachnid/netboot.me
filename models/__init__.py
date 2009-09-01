@@ -118,15 +118,20 @@ def truncateUrl(url):
 def formatUrlLink(url):
   return '<a href="%s">%s</a>' % (url, truncateUrl(url))
 
+def getContentUrl(url):
+  parsed = urlparse.urlparse(url)
+  parsed = (parsed[0], parsed[1] + ".nyud.net") + parsed[2:5]
+  return urlparse.urlunsplit(parsed)
+
 class KernelBootConfiguration(BootConfiguration):
   kernel = db.LinkProperty(required=True)
   initrd = db.StringProperty()
   args = db.StringProperty()
 
   def generateGpxeScript(self):
-    ret = ["kernel -n img %s %s" % (self.kernel, self.args)]
+    ret = ["kernel -n img %s %s" % (getContentUrl(self.kernel), self.args)]
     if self.initrd:
-      ret.append("initrd %s" % (self.initrd,))
+      ret.append("initrd %s" % (getContentUrl(self.initrd),))
     ret.append("boot img")
     return ret
 
@@ -151,7 +156,7 @@ class ImageBootConfiguration(BootConfiguration):
   
   def generateGpxeScript(self):
     return [
-      "kernel -n img %s" % (self.image,),
+      "kernel -n img %s" % (getContentUrl(self.image),),
       "boot img"
     ]
 
@@ -169,8 +174,8 @@ class MemdiskBootConfiguration(BootConfiguration):
   
   def generateGpxeScript(self):
     return [
-      "kernel -n img %s" % (config.memdisk_url,),
-      "initrd -n img %s" % (self.image,),
+      "kernel -n img %s" % (getContentUrl(config.memdisk_url),),
+      "initrd -n img %s" % (getContentUrl(self.image),),
       "boot img"
     ]
 
@@ -188,8 +193,8 @@ class ISOBootConfiguration(BootConfiguration):
   
   def generateGpxeScript(self):
     return [
-      "kernel -n img %s iso" % (config.memdisk_iso_url,),
-      "initrd -n img %s" % (self.image,),
+      "kernel -n img %s iso" % (getContentUrl(config.memdisk_iso_url),),
+      "initrd -n img %s" % (getContentUrl(self.image),),
       "boot img"
     ]
 
