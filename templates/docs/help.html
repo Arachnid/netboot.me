@@ -9,7 +9,8 @@
       <li><a href="#why">Why would I use netboot.me?</a></li>
       <li><a href="#download">Where can I get the bootloaders?</a></li>
       <li><a href="#create">Can I create my own configurations?</a></li>
-      <li><a href="#chainload">What are all these 'chainload URLs'?</a></li>
+      <li><a href="#chainload">How can I boot a configuration that's not on the menu?</a></li>
+      <li><a href="#vesa">The default menu doesn't work for me</a></li>
       <li><a href="#bugs">How can I report bugs and feature requests?</a></li>
       <li><a href="#group">Is there a discussion group or forum?</a></li>
       <li><a href="#oss">Is netboot.me Open Source Software?</a></li>
@@ -54,26 +55,26 @@
       <tr>
         <td><a href="http://static.netboot.me/gpxe/netbootme.usb" onclick="javascript:pageTracker._trackPageview('/static/gpxe/netbootme.usb');">netbootme.usb</a></td>
         <td>USB Disk Image</td>
-        <td>1359617de1ac73017c80d79d1876629f</td>
-        <td>aa863deacef71a3287e06fa251b3c4822ad3f28a</td>
+        <td>2f2e02e670d5de25be3c89c64b53bbb3</td>
+        <td>12ae82a37201ec1b1df944e07e9909e07be1f62d</td>
       </tr>
       <tr>
         <td><a href="http://static.netboot.me/gpxe/netbootme.iso"  onclick="javascript:pageTracker._trackPageview('/static/gpxe/netbootme.iso');">netbootme.iso</a></td>
         <td>CD Image</td>
-        <td>7f673c4fe5173da11cbbdf78c9dac8a5</td>
-        <td>96567594a3f2a2238225858acb58cc80b0065f7a</td>
+        <td>1ab81adc4f6457cbdb1a33d084fd80b1</td>
+        <td>c08c0b52b757d1d09818588f326c245bdccb0451</td>
       </tr>
       <tr>
         <td><a href="http://static.netboot.me/gpxe/netbootme.dsk" onclick="javascript:pageTracker._trackPageview('/static/gpxe/netbootme.dsk');">netbootme.dsk</a></td>
         <td>Floppy Disk Image</td>
-        <td>edc2d1a2efa9128a7c09c06bec912508</td>
-        <td>149821fd041456b1ebf4ce61878e604a762dde77</td>
+        <td>f42b7ddb5b4ed4e8c2c03098f55ba56e</td>
+        <td>19caf82f99837f137616f1d54e1dfe36b7f78fe4</td>
       </tr>
       <tr>
         <td><a href="http://static.netboot.me/gpxe/netbootme.kpxe" onclick="javascript:pageTracker._trackPageview('/static/gpxe/netbootme.kpxe');">netbootme.kpxe</a></td>
         <td>Netboot binary</td>
-        <td>008d2132ab713b09af6bb0de1c0e5682</td>
-        <td>5750278d4a6a1efa0f1da1735dd69defb328f76d</td>
+        <td>572f94284455397bb6c243a90a313624</td>
+        <td>a8b4b71c9c7ae1c1f3810f40a0351d248f1ce8f7</td>
       </tr>
     </table>
     <p>Installation instructions for all these images can be found <a href="/gettingstarted">here</a>.</p>
@@ -86,16 +87,20 @@
     <a href="http://github.com/Arachnid/netboot.me/issues">file a bug</a> for it
     to be included in the menu.</p>
     
-    <a name="chainload"><h3>What are all these 'chainload URLs'?</h3></a>
+    <a name="chainload"><h3>How can I boot a configuration that's not on the menu?</h3></a>
     <p>When you know exactly what you want to boot, it can be convenient to
-    bypass some or all of the menu system. The chainload URLs exist to facilitate
-    that. To boot directly into a configuration, start up your computer as you
-    would normally when booting netboot.me, and press Ctrl+B when prompted.
-    Then, type "autoboot" to detect and initialize your network interfaces. When
-    that returns, type "chain &lt;url>". Where &lt;url> is the chainload URL
-    displayed on the relevant configuration page. For example, to boot directly
-    into Memtest 86, you would type the following at the gPXE command prompt:
-    <code>gPXE> autoboot<br />gPXE> chain http://netboot.me/3005</code>.</p>
+    bypass some or all of the menu system. To boot directly into a configuration,
+    start up your computer as you would normally when booting netboot.me, and 
+    press any key when the message "Press any key for options or wait n seconds"
+    is displayed. Then, select the option titled "Boot a configuration directly",
+    and enter the ID of your configuration (the last part of the URL) and press
+    enter to boot it. For example, to boot directly into Memtest 86, you would 
+    enter the number '3005'.</p>
+    
+    <a name="vesa"><h3>The default menu doesn't work for me</h3></a>
+    <p>Some systems have trouble with the default (graphical) menu. If your system
+    is one of those, simply press any key when prompted to "Press any key for options
+    or wait n seconds", and select the text menu option from the resulting display.</p>
     
     <a name="bugs"><h3>How can I report bugs and feature requests?</h3></a>
     <p>You can submit bugs and feature requests

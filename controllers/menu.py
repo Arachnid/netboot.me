@@ -43,16 +43,9 @@ class GpxeHandler(base.BaseHandler):
       self.serveMenu()
   
   def serveMenu(self):
-    category = '/'
-    menutype = self.request.GET.get("menutype", "vesa")
-    if menutype == "text":
-      menufile = "menu.c32"
-    else:
-      menufile = "vesamenu.c32"
-    menupath = category + menufile
     self.response.headers['Content-Type'] = 'text/plain'
     self.response.out.write("#!gpxe\n")
-    self.response.out.write("chain %s menu.cfg\n" % (menufile,))
+    self.response.out.write("chain menu.c32 premenu.cfg\n")
 
   def serveUpgrade(self):
     self.response.headers['Content-Type'] = 'text/plain'

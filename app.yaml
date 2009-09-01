@@ -8,9 +8,9 @@ handlers:
   script: $PYTHON_LIB/google/appengine/ext/remote_api/handler.py
   login: admin
 
-- url: /(menu.c32|vesamenu.c32)
+- url: /(custom.gpxe|premenu.cfg|menu.c32|vesamenu.c32)
   static_files: static/\1
-  upload: static/(menu.c32|vesamenu.c32)
+  upload: static/(custom.gpxe|premenu.cfg|menu.c32|vesamenu.c32)
 
 - url: /googleaf282d669d99b844.html
   static_files: static/googleaf282d669d99b844.html
