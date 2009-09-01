@@ -1,5 +1,9 @@
 {% extends "../base.html" %}
 {% block title %}Welcome{% endblock %}
+{% block head %}
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="http://groups.google.com/group/netbootme-announce/feed/rss_v2_0_msgs.xml" />
+  <link rel="alternate" type="application/atom+xml" title="Atom" href="http://groups.google.com/group/netbootme-announce/feed/atom_v1_0_msgs.xml" />
+{% endblock %}
 {% block body %}
 	<div id="content-outer" class="clear">
     <div id="content-wrap">
