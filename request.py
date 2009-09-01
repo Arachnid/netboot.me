@@ -1,9 +1,12 @@
 import config
 import os
+import sys
 import webob
 
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp import util
+
+sys.path.append('./lib')
 
 from controllers import *
 
