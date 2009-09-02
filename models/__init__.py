@@ -119,9 +119,7 @@ def formatUrlLink(url):
   return '<a href="%s">%s</a>' % (url, truncateUrl(url))
 
 def getContentUrl(url):
-  parsed = urlparse.urlparse(url)
-  parsed = (parsed[0], parsed[1] + ".nyud.net") + parsed[2:5]
-  return urlparse.urlunsplit(parsed)
+  return url
 
 class KernelBootConfiguration(BootConfiguration):
   kernel = db.LinkProperty(required=True)
